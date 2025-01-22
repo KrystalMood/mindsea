@@ -3,7 +3,7 @@
     "deskripsi" => "Belajar berhitung dengan cara yang menyenangkan",
     "halaman_khusus" => false
 ])
-<main class="min-h-screen px-6 pt-28 pb-16 bg-white lg:ml-12 lg:py-28 lg:pr-10 lg:pl-60">
+<main class="min-h-screen px-6 pb-16 bg-white">
     <header class="mb-8">
         <div class="flex items-center gap-4">
             <i class="fa-solid fa-calculator bg-emerald-100 p-4 rounded-xl text-emerald-500 text-3xl"></i>

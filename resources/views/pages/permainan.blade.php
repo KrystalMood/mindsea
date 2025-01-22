@@ -4,7 +4,6 @@
     "halaman_khusus" => false
 ])
 <main class="min-h-screen px-6 bg-white">
-    <!-- Header Section -->
     <header class="mb-8">
         <div class="flex items-center gap-4">
             <i class="fa-solid fa-gamepad bg-purple-100 p-4 rounded-xl text-purple-500 text-3xl"></i>
@@ -32,7 +31,6 @@
                 aria-label="Dengarkan tips"></button>
         </section>
 
-        <!-- Audio Button -->
         <button
             onclick="window.SpeakText('Permainan Edukatif. Belajar sambil bermain lebih menyenangkan! Pilih permainan yang ingin kamu mainkan.')"
             class="mt-4 flex items-center gap-2 px-4 py-2 rounded-lg bg-purple-100 text-purple-700 hover:bg-purple-200 transition-colors"
@@ -42,25 +40,23 @@
         </button>
     </header>
 
-    <!-- Games Grid -->
     <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:gap-8">
-        <!-- Game Cards -->
-        @include('pages.permainan.components.game-card', [
-    'title' => 'Penjumlahan',
-    'description' => 'Belajar berhitung dengan cara yang menyenangkan',
-    'icon' => 'fa-plus-circle',
-    'color' => 'emerald',
-    'route' => route('permainan.penjumlahan'),
-    'difficulty' => 'Mudah'
-])
-        @include('pages.permainan.components.game-card', [
-    'title' => 'Segera Hadir',
-    'description' => '-',
-    'icon' => 'fa-hourglass-half',
-    'color' => 'gray',
-    'route' => '#',
-    'difficulty' => '-'
-])
+        @include('components.permainan.modal-permainan', [
+            'title' => 'Penjumlahan',
+            'description' => 'Belajar berhitung dengan cara yang menyenangkan',
+            'icon' => 'fa-plus-circle',
+            'color' => 'emerald',
+            'route' => route('permainan.penjumlahan'),
+            'difficulty' => 'Mudah'
+        ])
+        @include('components.permainan.modal-permainan', [
+            'title' => 'Segera Hadir',
+            'description' => '-',
+            'icon' => 'fa-hourglass-half',
+            'color' => 'gray',
+            'route' => '#',
+            'difficulty' => '-'
+        ])
     </div>
 </main>
 @endcomponent
