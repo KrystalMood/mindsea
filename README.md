@@ -1,7 +1,7 @@
 <h1 align="center">Mindsea</h1>
 
 <p align="center">
-  <img src="public/images/favicon.ico" alt="Logo Mindsea" width="120" />
+  <img src="public/images/mascot.png" alt="Logo Mindsea" width="120" />
 </p>
 
 <p align="center">
