@@ -1,76 +1,61 @@
 <h1 align="center">Mindsea</h1>
 
-⚠️ **NB** ⚠️  
-Saat ini, website masih mengalami kendala karena _database_ belum di-_hosting_. Oleh karena itu, kami menyarankan Anda untuk mengikuti langkah-langkah berikut agar dapat menjalankan proyek secara lokal:
-
-1. Jalankan perintah berikut di PowerShell atau CMD:
-    ```bash
-    git clone https://github.com/a6iyyu/mindsea.git .
-    ```
-2. Setelah itu, jalankan perintah berikut untuk menginstal dependensi JavaScript dan PHP:
-    ```bash
-    npm install
-    composer install
-    ```
-3. Selanjutnya, jalankan perintah berikut untuk memastikan _seed_ dan _migration_ berjalan dengan baik:
-    ```bash
-    php artisan migrate:refresh
-    php artisan db:seed
-    php artisan storage:link
-    ```
-4. Terakhir, jalankan perintah berikut untuk memulai proyek:
-    ```bash
-    php artisan serve
-    ```
-
-<p align="justify">
-Untuk mengakses akses secara penuh, Anda dapat mengisi pada halaman <i>Login</i> dengan menggunakan <i>email</i> <b>test@example.com</b> dan <i>password</i> 1234.
+<p align="center">
+  <img src="public/images/favicon.ico" alt="Logo Mindsea" width="120" />
 </p>
-
----
 
 <p align="center">
-<img src="https://github.com/a6iyyu/mindsea/blob/main/public/favicon.ico" alt="Logo" width="150" />
+  <strong>Mindsea</strong> adalah platform pembelajaran inklusif yang dirancang khusus untuk membantu anak-anak berkebutuhan khusus mendapatkan akses pendidikan yang layak dan setara di Indonesia.
 </p>
-
-<p align="justify">
-<strong>Mindsea</strong> adalah sebuah <i>platform</i> pembelajaran yang dirancang untuk membantu anak-anak berkebutuhan khusus mendapatkan pendidikan yang layak. Kami berharap, dengan adanya <i>platform</i> ini, pendidikan di Indonesia dapat lebih merata tanpa diskriminasi, sesuai dengan cita-cita mencerdaskan kehidupan bangsa sebagaimana tertuang dalam Pembukaan UUD NRI Tahun 1945.
-</p>
-
-<br />
 
 ---
 
-### _Tech Stack_ yang Digunakan
+### 🚀 Persiapan Lokal
 
--   **Laravel:** Membangun situs web dengan menerapkan paradigma MVC (Model-View-Controller).
--   **MySQL:** Merancang sistem basis data agar terintegrasi pada situs web.
--   **Tailwind CSS:** Mempermudah penggayaan saat mengembangkan situs web.
+Karena proyek ini sedang dalam tahap migrasi dari Laravel ke Next.js, ikuti langkah-langkah berikut untuk menjalankan aplikasi di mesin lokal Anda:
 
-<br />
+1. **Clone Repositori**
+
+   ```bash
+   git clone [https://github.com/a6iyyu/mindsea.git](https://github.com/a6iyyu/mindsea.git)
+   cd mindsea
+   ```
+
+2. **Instalasi Dependensi**
+
+   ```bash
+   npm install
+   ```
+
+3. **Konfigurasi Environment** Buat _file_ `.env.local` dan sesuaikan konfigurasi _database_ atau _API keys_ yang diperlukan.
+
+4. **Menjalankan Aplikasi**
+   ```bash
+   bun dev
+   ```
+
+Buka http://localhost:3000 di browser Anda.
+
+### 🛠️ Tech Stack (Modern Web Stack)
+
+Kami melakukan modernisasi teknologi untuk meningkatkan performa dan aksesibilitas:
+
+- Framework: Next.js 14/15 (App Router)
+- Database: MySQL (via Prisma)
+
+### ✨ Fitur Utama
+
+Mindsea menyediakan berbagai fitur yang mendukung ekosistem belajar ramah disabilitas:
+
+- Modul Interaktif: Materi pembelajaran yang disesuaikan dengan kebutuhan khusus.
+- Latihan Soal & Progres: Evaluasi pemahaman dengan pelacakan perkembangan belajar secara real-time.
+- Sistem Preferensi: Personalisasi antarmuka untuk kenyamanan visual dan navigasi setiap anak.
+- Dukungan & Notifikasi: Saluran bantuan dan pengingat belajar yang inklusif.
+
+### 💡 Visi Kami
+
+Sesuai dengan cita-cita Pembukaan UUD NRI Tahun 1945 untuk mencerdaskan kehidupan bangsa, Mindsea hadir sebagai solusi agar pendidikan di Indonesia lebih merata tanpa diskriminasi. Kami percaya setiap anak berhak mendapatkan pembelajaran yang menyenangkan.
 
 ---
 
-### Fitur dan Menu yang Disediakan
-
--   **Beranda:** Halaman utama dengan informasi terbaru.
--   **Materi:** Menyediakan modul pembelajaran interaktif.
--   **Latihan Soal:** Berisi soal untuk menguji pemahaman pengguna.
--   **Progres Belajar:** Menampilkan perkembangan belajar pengguna.
--   **Preferensi:** Pengaturan personalisasi untuk pengguna.
--   **Tentang Kami:** Informasi mengenai tim dan visi Mindsea.
--   **Notifikasi:** Memberikan pemberitahuan terbaru kepada pengguna.
--   **Chatbot:** Fitur asisten virtual untuk membantu pengguna.
--   **Dukungan:** Saluran bantuan untuk pengguna.
-
-<br />
-
----
-
-### Penutup
-
-<p align="justify">
-Mindsea menjadi pilihan alternatif dari sekian banyaknya platform pembelajaran di Indonesia, terlebih lagi mendukung adanya bantuan untuk anak berkebutuhan khusus. Diharapkan dengan adanya platform ini, pembelajaran menjadi lebih menyenangkan dan semua anak di Indonesia mendapatkan pendidikan layak tanpa pandang bulu.
-</p>
-
-**Mindsea? Mencerdaskan dengan Hati!**
+<p style="font-weight: bold; text-align: center">Mindsea? Mencerdaskan dengan Hati! ❤️</p>
