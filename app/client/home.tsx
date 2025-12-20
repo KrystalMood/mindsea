@@ -30,17 +30,21 @@ export default function Client() {
     };
 
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      if (typeof window !== "undefined" && window.speechSynthesis) window.speechSynthesis.cancel();
+    };
   }, [activeIndex]);
 
   return (
-    <main className="relative flex flex-col gap-6">
+    <>
       <span className="absolute inset-0 -z-10 bg-[url('/images/motion-grid.svg')] opacity-10" />
       <div className={`transition-all ${activeIndex === 0 ? "ring-2 ring-blue-400 rounded-3xl" : ""}`}>
         <Hero />
       </div>
       <Lessons activeIndex={activeIndex} />
       <Progress activeIndex={activeIndex} />
-    </main>
+    </>
   );
 }

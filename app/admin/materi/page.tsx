@@ -1,18 +1,25 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import { IoEye, IoPencil, IoTrash, IoTime, IoAdd } from "react-icons/io5";
 import Hero from "./components/hero";
+import Link from "next/link";
+import { IoAdd, IoEye, IoPencil, IoTime, IoTrash } from "react-icons/io5";
 
-interface Material {
+// const rows = [
+//   ["1", "Pengenalan JavaScript", "Pemula", "15 menit", "Edit"],
+//   ["2", "React Hooks Advanced", "Lanjutan", "30 menit", "Edit"],
+//   ["3", "Database MySQL", "Menengah", "25 menit", "Edit"],
+//   ["4", "TypeScript Fundamentals", "Pemula", "20 menit", "Edit"],
+//   ["5", "Next.js App Router", "Menengah", "35 menit", "Edit"],
+//   ["6", "Prisma ORM", "Menengah", "28 menit", "Edit"],
+//   ["7", "Authentication & Security", "Lanjutan", "40 menit", "Edit"],
+// ];
+
+type Material = {
   id: string;
   judul: string;
   audience: string | null;
-  format: string;
-  model: string;
   created_at: string;
-  updated_at: string;
 }
 
 export default function Materi() {
