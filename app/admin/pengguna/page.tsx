@@ -1,6 +1,20 @@
 import { Prisma } from "@/lib/prisma";
+import { Metadata } from "next";
 import Hero from "./components/hero";
 import UserTable from "./components/user-table";
+
+export const metadata: Metadata = {
+  title: "Pengguna | Mindsea",
+  description: "Halaman pengguna untuk admin Mindsea.",
+  openGraph: {
+    title: "Pengguna | Mindsea",
+    description: "Halaman pengguna untuk admin Mindsea.",
+  },
+  twitter: {
+    title: "Pengguna | Mindsea",
+    description: "Halaman pengguna untuk admin Mindsea.",
+  },
+};
 
 async function getUsers() {
   const users = await Prisma.pengguna.findMany({
