@@ -4,7 +4,7 @@ import { BookOpen, Volume2 } from "lucide-react";
 
 export default function MaterialHero() {
   return (
-    <section className="mx-8 mt-6 flex flex-col gap-4 rounded-xl border border-orange-200 bg-gradient-to-r from-amber-50 to-orange-50 p-6 sm:flex-row sm:items-center sm:justify-between">
+    <section className="mx-8 mt-6 flex flex-col gap-4 rounded-xl border border-orange-200 bg-linear-to-r from-amber-50 to-orange-50 p-6 sm:flex-row sm:items-center sm:justify-between">
       <div className="flex items-center gap-5">
         <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-orange-100 text-orange-600">
           <BookOpen size={28} />

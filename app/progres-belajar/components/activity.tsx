@@ -1,7 +1,7 @@
 import { BookOpen, PenTool, TrendingUp, CheckCircle } from "lucide-react";
 import { type LucideIcon } from "lucide-react";
 
-type ActivityLog = {
+type LogActivities = {
   id: number;
   title: string;
   description: string;
@@ -11,7 +11,7 @@ type ActivityLog = {
   bgColor: string;
 };
 
-const activityLogs: ActivityLog[] = [
+const logActivities: LogActivities[] = [
   {
     id: 1,
     title: "Menyelesaikan Materi",
@@ -52,31 +52,26 @@ const activityLogs: ActivityLog[] = [
 
 export default function Activity() {
   return (
-    <section className="p-6 border border-gray-100 bg-white shadow-sm rounded-xl">
+    <section className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
       <h2 className="text-heading mb-6 text-lg font-semibold">
         Aktivitas Terakhir
       </h2>
-      <div className="space-y-4">
-        {activityLogs.map((log) => (
-          <div
-            key={log.id}
-            className="flex items-center justify-between rounded-xl border border-gray-100 p-3 transition-all hover:bg-gray-50"
-          >
+      <ol className="space-y-4">
+        {logActivities.map((log) => (
+          <li key={log.id} className="flex items-center justify-between rounded-xl border border-gray-100 p-3 transition-all hover:bg-gray-50">
             <div className="flex items-center gap-3">
-              <span
-                className={`flex h-10 w-10 items-center justify-center rounded-xl ${log.bgColor} ${log.iconColor}`}
-              >
+              <i className={`flex h-10 w-10 items-center justify-center rounded-xl ${log.bgColor} ${log.iconColor}`}>
                 <log.icon size={18} />
-              </span>
-              <div>
+              </i>
+              <span>
                 <p className="text-heading text-sm font-medium">{log.title}</p>
                 <p className="text-text-secondary text-xs">{log.description}</p>
-              </div>
+              </span>
             </div>
-            <span className="text-text-secondary text-xs">{log.time}</span>
-          </div>
+            <time className="text-text-secondary text-xs">{log.time}</time>
+          </li>
         ))}
-      </div>
+      </ol>
     </section>
   );
 }
