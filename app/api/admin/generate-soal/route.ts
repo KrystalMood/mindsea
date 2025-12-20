@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
 import { Prisma } from "@/lib/prisma";
 
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
@@ -28,20 +31,39 @@ export async function POST(request: NextRequest) {
     let context = "";
 
     if (sumberKonteks === "materi") {
-      const idMateri = formData.get("idMateri") as string;
-      const materi = await Prisma.materi_generated.findUnique({
-        where: { id: idMateri },
+      const idMateriStr = formData.get("idMateri") as string;
+      
+      // Support multiple materials separated by comma
+      const idMateriList = idMateriStr
+        .split(",")
+        .map(id => id.trim())
+        .filter(id => id.length > 0);
+      
+      if (idMateriList.length === 0) {
+        return NextResponse.json(
+          { message: "Pilih minimal 1 materi" },
+          { status: 400 }
+        );
+      }
+
+      const materiList = await Prisma.materi_generated.findMany({
+        where: { 
+          id: { in: idMateriList } 
+        },
         select: { judul: true, konten: true },
       });
 
-      if (!materi) {
+      if (materiList.length === 0) {
         return NextResponse.json(
           { message: "Materi tidak ditemukan" },
           { status: 404 }
         );
       }
 
-      context = `Judul: ${materi.judul}\n\nKonten:\n${materi.konten}`;
+      // Combine multiple materials into one context
+      context = materiList
+        .map((m) => `=== ${m.judul} ===\n\n${m.konten}`)
+        .join("\n\n---\n\n");
     } else if (sumberKonteks === "pdf") {
       const file = formData.get("file") as File;
 
@@ -52,11 +74,37 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      // For now, return error for PDF - will implement later
-      return NextResponse.json(
-        { message: "Upload PDF belum didukung. Gunakan sumber materi." },
-        { status: 400 }
-      );
+      if (!file.type.includes("pdf")) {
+        return NextResponse.json(
+          { message: "File harus berformat PDF" },
+          { status: 400 }
+        );
+      }
+
+      try {
+        // Convert File to Buffer
+        const arrayBuffer = await file.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
+
+        // Parse PDF using pdf-parse v1.x
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        const pdf = require("pdf-parse/lib/pdf-parse");
+        const pdfData = await pdf(buffer);
+        context = pdfData.text;
+
+        if (!context || context.trim().length === 0) {
+          return NextResponse.json(
+            { message: "PDF tidak mengandung teks yang bisa dibaca" },
+            { status: 400 }
+          );
+        }
+      } catch (pdfError) {
+        console.error("PDF parsing error:", pdfError);
+        return NextResponse.json(
+          { message: "Gagal membaca file PDF. Pastikan file tidak terenkripsi." },
+          { status: 400 }
+        );
+      }
     } else {
       return NextResponse.json(
         { message: "Sumber konteks tidak valid" },

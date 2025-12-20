@@ -17,7 +17,7 @@ export default function Form({ onResult, onLoading, onError }: FormProps) {
   const [formData, setFormData] = useState({
     jumlahSoal: "5",
     sumberKonteks: "materi",
-    idMateri: "",
+    idMateri: [] as string[],
     kelas: "1",
     judul: "",
     file: null as File | null,
@@ -61,6 +61,14 @@ export default function Form({ onResult, onLoading, onError }: FormProps) {
     onError(null);
 
     try {
+      // Validasi frontend
+      if (formData.sumberKonteks === "materi" && formData.idMateri.length === 0) {
+        onError("Pilih minimal 1 materi");
+        setLoading(false);
+        onLoading(false);
+        return;
+      }
+
       const form = new FormData();
       form.append("jumlahSoal", formData.jumlahSoal);
       form.append("sumberKonteks", formData.sumberKonteks);
@@ -70,7 +78,8 @@ export default function Form({ onResult, onLoading, onError }: FormProps) {
       }
 
       if (formData.sumberKonteks === "materi") {
-        form.append("idMateri", formData.idMateri);
+        // Join multiple IDs with comma
+        form.append("idMateri", formData.idMateri.join(","));
       } else if (formData.file) {
         form.append("file", formData.file);
       }
@@ -141,7 +150,7 @@ export default function Form({ onResult, onLoading, onError }: FormProps) {
           ]}
           value={formData.kelas}
           onChange={(value) =>
-            setFormData({ ...formData, kelas: value, idMateri: "" })
+            setFormData({ ...formData, kelas: value, idMateri: [] })
           }
           required
         />
@@ -167,21 +176,63 @@ export default function Form({ onResult, onLoading, onError }: FormProps) {
             <label className="text-heading text-sm font-medium">
               Pilih Materi <span className="text-red-500">*</span>
             </label>
-            <select
-              className="border-border focus:border-primary w-full rounded-lg border px-4 py-2.5 text-sm outline-none transition-colors"
-              value={formData.idMateri}
-              onChange={(e) =>
-                setFormData({ ...formData, idMateri: e.target.value })
-              }
-              required
-            >
-              <option value="">-- Pilih Materi --</option>
-              {materiList.map((materi) => (
-                <option key={materi.id} value={materi.id}>
-                  {materi.kelas ? `Kelas ${materi.kelas} - ${materi.judul}` : materi.judul}
-                </option>
-              ))}
-            </select>
+            <div className="space-y-3">
+              {/* Select All / Deselect All */}
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, idMateri: materiList.map(m => m.id) })}
+                  className="text-primary hover:text-primary/80 text-xs font-medium"
+                >
+                  Pilih Semua
+                </button>
+                <span className="text-gray-300">|</span>
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, idMateri: [] })}
+                  className="text-text-secondary hover:text-heading text-xs font-medium"
+                >
+                  Hapus Semua
+                </button>
+              </div>
+
+              {/* Checkboxes */}
+              <div className="border-border max-h-64 space-y-2 overflow-y-auto rounded-lg border p-3">
+                {materiList.length === 0 ? (
+                  <p className="text-text-secondary text-sm">Tidak ada materi untuk kelas ini</p>
+                ) : (
+                  materiList.map((materi) => (
+                    <label
+                      key={materi.id}
+                      className="flex cursor-pointer items-start gap-3 rounded-lg p-2 hover:bg-gray-50"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={formData.idMateri.includes(materi.id)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setFormData({ ...formData, idMateri: [...formData.idMateri, materi.id] });
+                          } else {
+                            setFormData({ ...formData, idMateri: formData.idMateri.filter(id => id !== materi.id) });
+                          }
+                        }}
+                        className="mt-0.5"
+                      />
+                      <span className="text-heading flex-1 text-sm">
+                        {materi.kelas ? `Kelas ${materi.kelas} - ${materi.judul}` : materi.judul}
+                      </span>
+                    </label>
+                  ))
+                )}
+              </div>
+
+              {/* Selected count */}
+              {formData.idMateri.length > 0 && (
+                <p className="text-primary text-sm font-medium">
+                  {formData.idMateri.length} materi dipilih
+                </p>
+              )}
+            </div>
           </div>
         ) : (
           <div className="space-y-2">

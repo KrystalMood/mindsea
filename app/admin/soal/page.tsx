@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import Hero from "./components/hero";
 import { Prisma } from "@/lib/prisma";
+import SoalTable from "./components/soal-table";
 
 export const metadata: Metadata = {
   title: "Soal | Mindsea Admin",
@@ -55,38 +56,7 @@ export default async function Soal() {
       <span className="pointer-events-none absolute inset-0 -z-10 bg-[url('/images/motion-grid.svg')] mask-[linear-gradient(180deg,white,rgba(255,255,255,0))] bg-center opacity-5" />
       <Hero />
       <section className="border-border mx-6 my-10 rounded-xl border bg-white p-6">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-border">
-                <th className="px-4 py-3 text-left text-sm font-semibold text-heading">No</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-heading">Judul Soal</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-heading">Kelas</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-heading">Jumlah Soal</th>
-              </tr>
-            </thead>
-            <tbody>
-              {soalStats.length === 0 ? (
-                <tr>
-                  <td colSpan={4} className="px-4 py-8 text-center text-sm text-text-secondary">
-                    Belum ada soal. Silakan buat soal baru.
-                  </td>
-                </tr>
-              ) : (
-                soalStats.map((stat: any, index: number) => (
-                  <tr key={index} className="border-b border-border hover:bg-gray-50">
-                    <td className="px-4 py-3 text-sm text-text">{index + 1}</td>
-                    <td className="px-4 py-3 text-sm text-text">{stat.judul}</td>
-                    <td className="px-4 py-3 text-sm text-text">
-                      {stat.kelas ? `Kelas ${stat.kelas} SD` : "-"}
-                    </td>
-                    <td className="px-4 py-3 text-sm text-text">{stat.count} soal</td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+        <SoalTable soalStats={soalStats} />
       </section>
     </>
   );
