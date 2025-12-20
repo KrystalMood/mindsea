@@ -1,62 +1,57 @@
-import { LuUsers, LuBookOpen, LuTrendingUp, LuStar } from "react-icons/lu";
-import { StatCardProps } from "../types/stat-card-props";
-import { colorClasses } from "../constants/color-classes";
+"use client";
 
-function StatCard({ title, value, icon, color, subtitle }: StatCardProps) {
-  return (
-    <article className="border-border flex items-center gap-4 rounded-xl border bg-white p-5 transition-all hover:shadow-md">
-      <div
-        className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${colorClasses[color]}`}
-      >
-        {icon}
-      </div>
-      <div className="min-w-0 flex-1">
-        <p className="text-text-secondary text-sm">{title}</p>
-        <p className="text-heading text-2xl font-bold">{value}</p>
-        {subtitle && <p className="text-text-secondary text-xs">{subtitle}</p>}
-      </div>
-    </article>
-  );
-}
+import { FaRegChartBar } from "react-icons/fa";
+import { LuUsers, LuBookOpen, LuTrendingUp, LuStar } from "react-icons/lu";
+import { StatCard } from "@/app/admin/atoms/stats-card";
 
 export default function Statistics() {
   const stats = [
     {
       title: "Total Pengguna",
       value: 128,
-      icon: <LuUsers size={22} />,
+      icon: <LuUsers size={26} />,
       color: "primary" as const,
       subtitle: "+12 minggu ini",
     },
     {
       title: "Total Materi",
       value: 45,
-      icon: <LuBookOpen size={22} />,
+      icon: <LuBookOpen size={26} />,
       color: "secondary" as const,
       subtitle: "8 materi baru",
     },
     {
       title: "Tingkat Penyelesaian",
       value: "78%",
-      icon: <LuTrendingUp size={22} />,
+      icon: <LuTrendingUp size={26} />,
       color: "accent" as const,
       subtitle: "+5% dari bulan lalu",
     },
     {
       title: "Rata-rata Nilai",
       value: 85,
-      icon: <LuStar size={22} />,
+      icon: <LuStar size={26} />,
       color: "primary" as const,
       subtitle: "dari 256 latihan",
     },
   ];
 
   return (
-    <section className="mx-6 mt-6">
-      <header className="mb-4 flex items-center justify-between">
-        <h2 className="text-heading text-lg font-semibold">Statistik</h2>
-      </header>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <section className="mx-6 mt-8">
+      <div className="mb-6 flex cursor-default items-center gap-4">
+        <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-lg shadow-indigo-100">
+          <FaRegChartBar className="h-4 w-4 lg:h-6 lg:w-6" />
+        </span>
+        <span className="flex flex-col">
+          <h2 className="text-xl leading-tight font-black tracking-tight text-slate-800">
+            Statistik Utama
+          </h2>
+          <p className="mt-1 text-sm font-medium text-slate-500">
+            Ringkasan data real-time platform Mindsea
+          </p>
+        </span>
+      </div>
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat) => (
           <StatCard key={stat.title} {...stat} />
         ))}
