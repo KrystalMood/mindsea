@@ -1,6 +1,6 @@
 import { Sidebar as ISidebar } from "@/types/components";
-import { BarChart, Bell, BookOpen, Home, LayoutDashboard, PenTool, Users } from "lucide-react";
-import { ADMIN_DASHBOARD, ADMIN_MATERIAL, ADMIN_QUIZZES, ADMIN_USERS, STUDENT_DASHBOARD, STUDENT_MATERIAL, STUDENT_NOTIFICATIONS, STUDENT_PROGRESS, STUDENT_QUIZZES } from "@/constants/route";
+import { BarChart, BookOpen, Home, LayoutDashboard, PenTool, Users } from "lucide-react";
+import { ADMIN_DASHBOARD, ADMIN_MATERIAL, ADMIN_QUIZZES, ADMIN_USERS, STUDENT_DASHBOARD, STUDENT_MATERIAL, STUDENT_PROGRESS, STUDENT_QUIZZES } from "@/constants/route";
 import { Peran } from "@/lib/generated/prisma";
 
 const Sidebar: Record<Peran, ISidebar[]> = {
@@ -52,11 +52,6 @@ const Sidebar: Record<Peran, ISidebar[]> = {
       href: STUDENT_PROGRESS,
       icon: <BarChart className="h-5 w-5" />,
       label: "Progres Belajar",
-    },
-    {
-      href: STUDENT_NOTIFICATIONS,
-      icon: <Bell className="h-5 w-5" />,
-      label: "Notifikasi",
     },
   ],
 };
