@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { speak } from "@/lib/text-to-speech";
+import { speak } from "@/utils/text-to-speech";
 import Hero from "@/app/latihan-soal/components/hero";
 import Statistics from "@/app/latihan-soal/components/statistics";
 import Tips from "@/app/latihan-soal/components/tips";
