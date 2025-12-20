@@ -71,11 +71,6 @@ const Sidebar: Record<Peran, ISidebar[]> = {
       icon: <BarChart className="h-5 w-5" />,
       label: "Progres Belajar",
     },
-    {
-      href: STUDENT_NOTIFICATIONS,
-      icon: <Bell className="h-5 w-5" />,
-      label: "Notifikasi",
-    },
   ],
 };
 
