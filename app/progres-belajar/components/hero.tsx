@@ -1,6 +1,6 @@
 "use client";
 
-import { speak } from "@/lib/text-to-speech";
+import { speak } from "@/utils/text-to-speech";
 import { BookOpen, Volume2 } from "lucide-react";
 
 export default function Hero({ isActive }: { isActive?: boolean }) {

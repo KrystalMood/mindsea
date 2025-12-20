@@ -1,7 +1,8 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { speak } from "@/lib/text-to-speech";
+import { speak } from "@/utils/text-to-speech";
 import Hero from "@/app/materi/components/hero";
 import Statistics from "@/app/materi/components/statistics";
 import Material from "@/app/materi/components/material";
@@ -11,12 +12,18 @@ const sections: { text: string }[] = [
   { text: "Statistik Total Materi. Saat ini tersedia tiga materi pembelajaran." },
   { text: "Statistik Materi Selesai. Kamu telah menyelesaikan nol dari tiga materi." },
   { text: "Statistik Progres Belajar. Progres belajar kamu saat ini adalah nol persen." },
-  { text: "Materi Matematika Dasar. Pengenalan konsep matematika dasar dengan tingkat kesulitan mudah. Tekan enter untuk mulai belajar." },
-  { text: "Materi Ilmu Pengetahuan Alam. Pengenalan konsep ilmu pengetahuan alam dengan tingkat kesulitan sulit. Tekan enter untuk mulai belajar." },
+  { text: "Materi Matematika Dasar. Pengenalan konsep matematika dasar dengan tingkat kesulitan mudah. Tekan SHIFT untuk mulai belajar." },
+  { text: "Materi Ilmu Pengetahuan Alam. Pengenalan konsep ilmu pengetahuan alam dengan tingkat kesulitan sulit. Tekan SHIFT untuk mulai belajar." },
 ];
+
+const materialIds: Record<number, string> = {
+  4: "matematika-dasar",
+  5: "ilmu-pengetahuan-alam",
+};
 
 export default function Client() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const router = useRouter();
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -26,16 +33,18 @@ export default function Client() {
         setActiveIndex((prev) => (prev - 1 + sections.length) % sections.length);
       } else if (e.key === "Enter") {
         speak(sections[activeIndex].text);
+      } else if (e.key === "Shift") {
+        const target = materialIds[activeIndex];
+        if (target) {
+          speak(`Membuka halaman detail ${target.replace(/-/g, " ").toLowerCase()}`);
+          router.push(`/materi/${target}`);
+        }
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      if (typeof window !== "undefined" && window.speechSynthesis) window.speechSynthesis.cancel();
-    };
-  }, [activeIndex]);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [activeIndex, router]);
 
   return (
     <>

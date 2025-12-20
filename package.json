@@ -10,7 +10,8 @@
     "format": "prettier --write . --ext .js,.jsx,.ts,.tsx,.json,.md",
     "lint": "eslint",
     "start": "next start",
-    "seed": "bun prisma/seed.ts"
+    "seed": "bun prisma/seed.ts",
+    "seed:materi": "bun prisma/seed-materi.ts"
   },
   "dependencies": {
     "@google/genai": "^1.34.0",
@@ -24,6 +25,7 @@
     "clsx": "^2.1.1",
     "jose": "^6.1.3",
     "next": "16.1.0",
+    "pdf-parse": "^2.4.5",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-markdown": "^10.1.0",
@@ -36,6 +38,7 @@
     "@types/axios": "^0.14.4",
     "@types/bcryptjs": "^3.0.0",
     "@types/node": "^20",
+    "@types/pdf-parse": "^1.1.5",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "autoprefixer": "^10.4.23",

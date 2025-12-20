@@ -43,17 +43,17 @@ model latihan {
 }
 
 model materi_generated {
-  id             String           @id @default(cuid())
-  judul          String
-  prompt         String           @db.Text
-  konten         String           @db.Text
-  model          String
-  audience       String?
-  format         String           @default("markdown")
-  created_by     BigInt?
-  created_at     DateTime         @default(now())
-  updated_at     DateTime         @updatedAt
-  progres_materi progres_materi[]
+  id           String   @id @default(cuid())
+  judul        String
+  prompt       String   @db.Text
+  konten       String   @db.Text
+  model        String
+  audience     String?
+  kelas        Int?     // Kelas untuk siswa (1-6 SD)
+  format       String   @default("markdown")
+  created_by   BigInt?
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
 
   @@map("materi_generated")
 }
@@ -74,7 +74,9 @@ model progres_materi {
 
 model pertanyaan {
   id_pertanyaan   BigInt   @id @default(autoincrement())
-  id_latihan      BigInt
+  id_latihan      BigInt?
+  kelas           Int?     // Kelas untuk siswa (1-6 SD)
+  judul           String?  // Judul soal (UAS, UTS, Ulangan Harian, dll)
   teks_pertanyaan String   @db.Text
   pilihan         Json
   jawaban_benar   String
@@ -83,7 +85,8 @@ model pertanyaan {
   updated_at      DateTime @updatedAt
   latihan         latihan  @relation(fields: [id_latihan], references: [id_latihan])
 
-  @@index([id_latihan], map: "pertanyaan_id_latihan_fkey")
+  latihan latihan? @relation(fields: [id_latihan], references: [id_latihan])
+
   @@map("pertanyaan")
 }
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { speak } from "@/lib/text-to-speech";
+import { speak } from "@/utils/text-to-speech";
 import Hero from "@/app/components/hero";
 import Lessons from "@/app/components/lessons";
 import Progress from "@/app/components/progress";
