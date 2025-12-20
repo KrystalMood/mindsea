@@ -1,0 +1,168 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+enum Peran {
+  ADMIN
+  SISWA
+}
+
+enum Kesulitan {
+  MUDAH  @map("Mudah")
+  SEDANG @map("Sedang")
+  SULIT  @map("Sulit")
+}
+
+enum JenisKonten {
+  PENGENALAN   @map("Pengenalan")
+  MATERI_UTAMA @map("Materi Utama")
+  LATIHAN      @map("Latihan")
+}
+
+model pengguna {
+  id_pengguna BigInt   @id @default(autoincrement())
+  nama        String
+  surel       String   @unique
+  kata_sandi  String
+  bio         String?  @db.Text
+  peran       Peran    @default(SISWA)
+  aktif       Boolean  @default(true)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  progres_materi  progres_materi[]
+  progres_latihan progres_latihan[]
+  notifikasi      notifikasi[]
+  aktivitas       aktivitas[]
+
+  @@map("pengguna")
+}
+
+model materi {
+  id_materi         BigInt    @id @default(autoincrement())
+  judul             String
+  deskripsi         String    @db.Text
+  tingkat_kesulitan Kesulitan @default(MUDAH)
+  aktif             Boolean   @default(true)
+  created_at        DateTime  @default(now())
+  updated_at        DateTime  @updatedAt
+
+  konten           konten_materi[]
+  progres_pengguna progres_materi[]
+
+  @@map("materi")
+}
+
+model konten_materi {
+  id_konten    BigInt      @id @default(autoincrement())
+  id_materi    BigInt
+  jenis_konten JenisKonten
+  judul        String
+  isi_konten   String      @db.Text
+  teks_audio   String?     @db.Text
+  jalur_gambar String?
+  jalur_video  String?
+  created_at   DateTime    @default(now())
+  updated_at   DateTime    @updatedAt
+
+  materi materi @relation(fields: [id_materi], references: [id_materi])
+
+  @@map("konten_materi")
+}
+
+model latihan {
+  id_latihan       BigInt   @id @default(autoincrement())
+  judul            String
+  deskripsi        String   @db.Text
+  ikon             String?
+  warna            String?
+  total_pertanyaan Int      @default(0)
+  aktif            Boolean  @default(true)
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+
+  // Relasi
+  pertanyaan       pertanyaan[]
+  progres_pengguna progres_latihan[]
+
+  @@map("latihan")
+}
+
+model pertanyaan {
+  id_pertanyaan   BigInt   @id @default(autoincrement())
+  id_latihan      BigInt
+  teks_pertanyaan String   @db.Text
+  pilihan         Json
+  jawaban_benar   String
+  jalur_gambar    String?
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  latihan latihan @relation(fields: [id_latihan], references: [id_latihan])
+
+  @@map("pertanyaan")
+}
+
+model progres_materi {
+  id_progres   BigInt    @id @default(autoincrement())
+  id_pengguna  BigInt
+  id_materi    BigInt
+  mulai        Boolean   @default(false)
+  selesai      Boolean   @default(false)
+  selesai_pada DateTime?
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
+
+  pengguna pengguna @relation(fields: [id_pengguna], references: [id_pengguna])
+  materi   materi   @relation(fields: [id_materi], references: [id_materi])
+
+  @@unique([id_pengguna, id_materi])
+  @@map("progres_materi")
+}
+
+model progres_latihan {
+  id_progres  BigInt    @id @default(autoincrement())
+  id_pengguna BigInt
+  id_latihan  BigInt
+  skor        Int       @default(0)
+  selesai     DateTime?
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+
+  pengguna pengguna @relation(fields: [id_pengguna], references: [id_pengguna])
+  latihan  latihan  @relation(fields: [id_latihan], references: [id_latihan])
+
+  @@map("progres_latihan")
+}
+
+model notifikasi {
+  id_notifikasi BigInt   @id @default(autoincrement())
+  id_pengguna   BigInt
+  tipe          String
+  judul         String
+  pesan         String   @db.Text
+  dibaca        Boolean  @default(false)
+  created_at    DateTime @default(now())
+
+  pengguna pengguna @relation(fields: [id_pengguna], references: [id_pengguna])
+
+  @@map("notifikasi")
+}
+
+model aktivitas {
+  id_aktivitas BigInt   @id @default(autoincrement())
+  id_pengguna  BigInt?
+  judul        String
+  deskripsi    String   @db.Text
+  tipe         String
+  created_at   DateTime @default(now())
+
+  pengguna pengguna? @relation(fields: [id_pengguna], references: [id_pengguna])
+
+  @@map("aktivitas")
+}
