@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import Hero from "./components/hero";
-import Table from "@/components/common/table";
+import { Prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
   title: "Soal | Mindsea Admin",
@@ -15,28 +15,78 @@ export const metadata: Metadata = {
   },
 };
 
-const rows = [
-  ["1", "Soal Matematika Dasar", "Mudah", "10", "Edit"],
-  ["2", "Soal Bahasa Indonesia", "Sedang", "15", "Edit"],
-  ["3", "Soal IPA Terpadu", "Sulit", "20", "Edit"],
-  ["4", "Soal Bahasa Inggris", "Mudah", "12", "Edit"],
-  ["5", "Soal IPS", "Sedang", "18", "Edit"],
-  ["6", "Soal PKN", "Mudah", "8", "Edit"],
-  ["7", "Soal Seni Budaya", "Sedang", "10", "Edit"],
-];
+async function getSoalStats() {
+  // Group by judul and kelas to get statistics
+  const soalList = await Prisma.pertanyaan.findMany({
+    select: {
+      judul: true,
+      kelas: true,
+      id_pertanyaan: true,
+    },
+    orderBy: [
+      { kelas: "asc" },
+      { judul: "asc" },
+      { created_at: "desc" },
+    ],
+  });
 
-export default function Soal() {
+  // Group questions by judul and kelas
+  const grouped = soalList.reduce((acc: any, soal) => {
+    const key = `${soal.judul || "Tanpa Judul"}-${soal.kelas || 0}`;
+    if (!acc[key]) {
+      acc[key] = {
+        judul: soal.judul || "Tanpa Judul",
+        kelas: soal.kelas,
+        count: 0,
+      };
+    }
+    acc[key].count++;
+    return acc;
+  }, {});
+
+  return Object.values(grouped);
+}
+
+export default async function Soal() {
+  const soalStats = await getSoalStats();
+
   return (
     <>
       <span className="pointer-events-none absolute inset-0 -z-10 bg-[url('/images/motion-grid.svg')] mask-[linear-gradient(180deg,white,rgba(255,255,255,0))] bg-center opacity-5" />
       <Hero />
       <section className="border-border mx-6 my-10 rounded-xl border bg-white p-6">
-        <Table
-          headers={["No", "Judul Soal", "Tingkat", "Jumlah", "Aksi"]}
-          rows={rows}
-          sortable={["Judul Soal", "Tingkat"]}
-          itemsPerPage={5}
-        />
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-border">
+                <th className="px-4 py-3 text-left text-sm font-semibold text-heading">No</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-heading">Judul Soal</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-heading">Kelas</th>
+                <th className="px-4 py-3 text-left text-sm font-semibold text-heading">Jumlah Soal</th>
+              </tr>
+            </thead>
+            <tbody>
+              {soalStats.length === 0 ? (
+                <tr>
+                  <td colSpan={4} className="px-4 py-8 text-center text-sm text-text-secondary">
+                    Belum ada soal. Silakan buat soal baru.
+                  </td>
+                </tr>
+              ) : (
+                soalStats.map((stat: any, index: number) => (
+                  <tr key={index} className="border-b border-border hover:bg-gray-50">
+                    <td className="px-4 py-3 text-sm text-text">{index + 1}</td>
+                    <td className="px-4 py-3 text-sm text-text">{stat.judul}</td>
+                    <td className="px-4 py-3 text-sm text-text">
+                      {stat.kelas ? `Kelas ${stat.kelas} SD` : "-"}
+                    </td>
+                    <td className="px-4 py-3 text-sm text-text">{stat.count} soal</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </section>
     </>
   );
