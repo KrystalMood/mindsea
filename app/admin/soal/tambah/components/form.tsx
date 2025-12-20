@@ -18,36 +18,30 @@ export default function Form({ onResult, onLoading, onError }: FormProps) {
     jumlahSoal: "5",
     sumberKonteks: "materi",
     idMateri: "",
-    idLatihan: "",
+    kelas: "1",
+    judul: "",
     file: null as File | null,
   });
 
   const [materiList, setMateriList] = useState<
-    Array<{ id: string; judul: string }>
-  >([]);
-  const [latihanList, setLatihanList] = useState<
-    Array<{ id: string; judul: string }>
+    Array<{ id: string; judul: string; kelas: number | null }>
   >([]);
   const [loading, setLoading] = useState(false);
 
-  // Fetch materi dan latihan
+  // Fetch materi
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchMateri = async () => {
       try {
-        const [materiRes, latihanRes] = await Promise.all([
-          axios.get("/api/admin/materi"),
-          axios.get("/api/admin/latihan"),
-        ]);
-        
+        const params = formData.kelas ? `?kelas=${formData.kelas}` : "";
+        const materiRes = await axios.get(`/api/admin/materi${params}`);
         setMateriList(materiRes.data.data || []);
-        setLatihanList(latihanRes.data.data || []);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching materi:", error);
       }
     };
 
-    fetchData();
-  }, []);
+    fetchMateri();
+  }, [formData.kelas]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -70,7 +64,10 @@ export default function Form({ onResult, onLoading, onError }: FormProps) {
       const form = new FormData();
       form.append("jumlahSoal", formData.jumlahSoal);
       form.append("sumberKonteks", formData.sumberKonteks);
-      form.append("idLatihan", formData.idLatihan);
+      form.append("kelas", formData.kelas);
+      if (formData.judul) {
+        form.append("judul", formData.judul);
+      }
 
       if (formData.sumberKonteks === "materi") {
         form.append("idMateri", formData.idMateri);
@@ -118,27 +115,36 @@ export default function Form({ onResult, onLoading, onError }: FormProps) {
           required
         />
 
-        {/* Pilih Latihan */}
-        <div className="space-y-2">
-          <label className="text-heading text-sm font-medium">
-            Pilih Latihan <span className="text-red-500">*</span>
-          </label>
-          <select
-            className="border-border focus:border-primary w-full rounded-lg border px-4 py-2.5 text-sm outline-none transition-colors"
-            value={formData.idLatihan}
-            onChange={(e) =>
-              setFormData({ ...formData, idLatihan: e.target.value })
-            }
-            required
-          >
-            <option value="">-- Pilih Latihan --</option>
-            {latihanList.map((latihan) => (
-              <option key={latihan.id} value={latihan.id}>
-                {latihan.judul}
-              </option>
-            ))}
-          </select>
-        </div>
+        {/* Judul Soal */}
+        <Input
+          label="Judul Soal"
+          name="judul"
+          type="text"
+          placeholder="Contoh: UAS, UTS, Ulangan Harian"
+          value={formData.judul}
+          onChange={(e) =>
+            setFormData({ ...formData, judul: e.target.value })
+          }
+        />
+
+        {/* Soal Kelas */}
+        <Select
+          label="Soal Kelas"
+          name="kelas"
+          options={[
+            { value: "1", label: "Kelas 1 SD" },
+            { value: "2", label: "Kelas 2 SD" },
+            { value: "3", label: "Kelas 3 SD" },
+            { value: "4", label: "Kelas 4 SD" },
+            { value: "5", label: "Kelas 5 SD" },
+            { value: "6", label: "Kelas 6 SD" },
+          ]}
+          value={formData.kelas}
+          onChange={(value) =>
+            setFormData({ ...formData, kelas: value, idMateri: "" })
+          }
+          required
+        />
 
         {/* Sumber Konteks */}
         <Select
@@ -172,7 +178,7 @@ export default function Form({ onResult, onLoading, onError }: FormProps) {
               <option value="">-- Pilih Materi --</option>
               {materiList.map((materi) => (
                 <option key={materi.id} value={materi.id}>
-                  {materi.judul}
+                  {materi.kelas ? `Kelas ${materi.kelas} - ${materi.judul}` : materi.judul}
                 </option>
               ))}
             </select>

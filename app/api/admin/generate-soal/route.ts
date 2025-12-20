@@ -7,11 +7,19 @@ export async function POST(request: NextRequest) {
     const formData = await request.formData();
     const jumlahSoal = parseInt(formData.get("jumlahSoal") as string);
     const sumberKonteks = formData.get("sumberKonteks") as string;
-    const idLatihan = formData.get("idLatihan") as string;
+    const kelas = parseInt(formData.get("kelas") as string);
+    const judul = formData.get("judul") as string | null;
 
     if (!jumlahSoal || jumlahSoal < 1 || jumlahSoal > 20) {
       return NextResponse.json(
         { message: "Jumlah soal harus antara 1-20" },
+        { status: 400 }
+      );
+    }
+
+    if (!kelas || kelas < 1 || kelas > 6) {
+      return NextResponse.json(
+        { message: "Kelas harus antara 1-6 SD" },
         { status: 400 }
       );
     }
@@ -131,15 +139,16 @@ PENTING: Berikan respons HANYA dalam format JSON yang valid tanpa penjelasan tam
       throw new Error("AI tidak menghasilkan soal yang valid");
     }
 
-    // Tambahkan id_latihan ke setiap soal
-    const questionsWithLatihan = questions.map((q) => ({
+    // Tambahkan kelas dan judul ke setiap soal
+    const questionsWithKelas = questions.map((q) => ({
       ...q,
-      id_latihan: idLatihan,
+      kelas: kelas,
+      judul: judul || null,
     }));
 
     return NextResponse.json({
       message: "Soal berhasil di-generate",
-      questions: questionsWithLatihan,
+      questions: questionsWithKelas,
     });
   } catch (error) {
     console.error("Error generating questions:", error);

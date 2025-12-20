@@ -10,7 +10,8 @@
     "format": "prettier --write . --ext .js,.jsx,.ts,.tsx,.json,.md",
     "lint": "eslint",
     "start": "next start",
-    "seed": "bun prisma/seed.ts"
+    "seed": "bun prisma/seed.ts",
+    "seed:materi": "bun prisma/seed-materi.ts"
   },
   "dependencies": {
     "@google/genai": "^1.34.0",

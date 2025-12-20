@@ -68,6 +68,7 @@ model materi_generated {
   konten       String   @db.Text
   model        String
   audience     String?
+  kelas        Int?     // Kelas untuk siswa (1-6 SD)
   format       String   @default("markdown")
   created_by   BigInt?
   created_at   DateTime @default(now())
@@ -78,7 +79,9 @@ model materi_generated {
 
 model pertanyaan {
   id_pertanyaan   BigInt   @id @default(autoincrement())
-  id_latihan      BigInt
+  id_latihan      BigInt?
+  kelas           Int?     // Kelas untuk siswa (1-6 SD)
+  judul           String?  // Judul soal (UAS, UTS, Ulangan Harian, dll)
   teks_pertanyaan String   @db.Text
   pilihan         Json
   jawaban_benar   String
@@ -86,7 +89,7 @@ model pertanyaan {
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
 
-  latihan latihan @relation(fields: [id_latihan], references: [id_latihan])
+  latihan latihan? @relation(fields: [id_latihan], references: [id_latihan])
 
   @@map("pertanyaan")
 }

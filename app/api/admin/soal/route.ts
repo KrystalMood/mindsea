@@ -13,18 +13,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Get id_latihan from first question
-    const idLatihan = BigInt(questions[0].id_latihan);
+    // Get kelas and judul from first question
+    const kelas = questions[0]?.kelas;
+    const judul = questions[0]?.judul || null;
 
-    // Validate latihan exists
-    const latihan = await Prisma.latihan.findUnique({
-      where: { id_latihan: idLatihan },
-    });
-
-    if (!latihan) {
+    if (!kelas || kelas < 1 || kelas > 6) {
       return NextResponse.json(
-        { message: "Latihan tidak ditemukan" },
-        { status: 404 }
+        { message: "Kelas tidak valid" },
+        { status: 400 }
       );
     }
 
@@ -33,30 +29,22 @@ export async function POST(request: NextRequest) {
       questions.map((q) =>
         Prisma.pertanyaan.create({
           data: {
-            id_latihan: idLatihan,
             teks_pertanyaan: q.teks_pertanyaan,
             pilihan: q.pilihan,
             jawaban_benar: q.jawaban_benar,
+            kelas: q.kelas,
+            judul: q.judul || null,
           },
         })
       )
     );
-
-    // Update total_pertanyaan in latihan
-    await Prisma.latihan.update({
-      where: { id_latihan: idLatihan },
-      data: {
-        total_pertanyaan: {
-          increment: createdQuestions.length,
-        },
-      },
-    });
 
     return NextResponse.json(
       {
         message: "Soal berhasil disimpan",
         data: {
           created: createdQuestions.length,
+          kelas: kelas,
         },
       },
       { status: 201 }
