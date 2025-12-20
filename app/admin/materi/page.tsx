@@ -1,5 +1,19 @@
+import { Metadata } from "next";
 import Hero from "./components/hero";
 import Table from "@/components/common/table";
+
+export const metadata: Metadata = {
+  title: "Materi | Mindsea Admin",
+  description: "Halaman materi untuk admin",
+  openGraph: {
+    title: "Materi | Mindsea Admin",
+    description: "Halaman materi untuk admin",
+  },
+  twitter: {
+    title: "Materi | Mindsea Admin",
+    description: "Halaman materi untuk admin",
+  },
+};
 
 const rows = [
   ["1", "Pengenalan JavaScript", "Pemula", "15 menit", "Edit"],
