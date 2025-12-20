@@ -4,14 +4,20 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Sidebar as SidebarMenus } from "@/constants/menu";
-import type { Peran } from "@/lib/generated/prisma";
+import { Peran } from "@/lib/generated/prisma";
 import Image from "next/image";
 import Link from "next/link";
 
 export function Sidebar({ className, role }: { className?: string; role: Peran }) {
   const pathname = usePathname();
   const [openSubMenu, setOpenSubMenu] = useState<string | null>(null);
+  const sidebarMenus = SidebarMenus[role?.toUpperCase() as Peran];
   const handleSubMenuToggle = (label: string) => setOpenSubMenu(openSubMenu === label ? null : label);
+
+  if (!sidebarMenus) {
+    console.error(`No sidebar menus found for role: ${role}`);
+    return null;
+  }
 
   return (
     <aside className={`bg-primary fixed top-0 left-0 z-50 h-screen w-64 text-white shadow-2xl transition-transform duration-300 ease-in-out ${className}`}>
@@ -30,7 +36,7 @@ export function Sidebar({ className, role }: { className?: string; role: Peran }
         <span className="h-px w-3 bg-gray-200/50"></span>
       </div>
       <section className="flex h-full flex-col gap-1 overflow-y-auto px-3 pb-20">
-        {(SidebarMenus[role] || []).map((menu) => {
+        {sidebarMenus.map((menu) => {
           if (menu.subMenu) {
             return (
               <nav key={menu.label} className="flex flex-col">

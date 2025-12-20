@@ -8,7 +8,7 @@ const Sidebar: Record<Peran, ISidebar[]> = {
     {
       href: ADMIN_DASHBOARD,
       icon: <LayoutDashboard className="h-5 w-5" />,
-      label: "Dasbor Admin",
+      label: "Dasbor",
     },
     {
       href: ADMIN_USERS,
