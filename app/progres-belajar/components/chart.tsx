@@ -3,11 +3,17 @@
 import { ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import data from "@/app/progres-belajar/data/chart";
 
-export default function Chart() {
+export default function Chart({ isActive }: { isActive?: boolean }) {
   const percentage = data[0].value;
 
   return (
-    <section className="flex flex-col items-center justify-center rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+    <section
+      className={`flex flex-col items-center justify-center rounded-xl border bg-white p-6 shadow-sm transition-all duration-300 ${
+        isActive
+          ? "scale-[1.01] border-transparent shadow-xl ring-4 ring-emerald-400"
+          : "border-gray-100"
+      }`}
+    >
       <h2 className="text-heading mb-6 text-lg font-semibold">
         Progress Keseluruhan
       </h2>
@@ -39,7 +45,10 @@ export default function Chart() {
       <article className="mt-6 flex gap-6">
         {data.map((item, index) => (
           <div key={index} className="flex items-center gap-2">
-            <span className="h-3 w-3 rounded-full" style={{ backgroundColor: item.color }} />
+            <span
+              className="h-3 w-3 rounded-full"
+              style={{ backgroundColor: item.color }}
+            />
             <span className="text-text-secondary text-sm">{item.name}</span>
           </div>
         ))}

@@ -50,17 +50,28 @@ const logActivities: LogActivities[] = [
   },
 ];
 
-export default function Activity() {
+export default function Activity({ isActive }: { isActive?: boolean }) {
   return (
-    <section className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+    <section
+      className={`rounded-xl border bg-white p-6 shadow-sm transition-all duration-300 ${
+        isActive
+          ? "scale-[1.01] border-transparent shadow-xl ring-4 ring-indigo-400"
+          : "border-gray-100"
+      }`}
+    >
       <h2 className="text-heading mb-6 text-lg font-semibold">
         Aktivitas Terakhir
       </h2>
       <ol className="space-y-4">
         {logActivities.map((log) => (
-          <li key={log.id} className="flex items-center justify-between rounded-xl border border-gray-100 p-3 transition-all hover:bg-gray-50">
+          <li
+            key={log.id}
+            className="flex items-center justify-between rounded-xl border border-gray-100 p-3 transition-all hover:bg-gray-50"
+          >
             <div className="flex items-center gap-3">
-              <i className={`flex h-10 w-10 items-center justify-center rounded-xl ${log.bgColor} ${log.iconColor}`}>
+              <i
+                className={`flex h-10 w-10 items-center justify-center rounded-xl ${log.bgColor} ${log.iconColor}`}
+              >
                 <log.icon size={18} />
               </i>
               <span>

@@ -7,54 +7,35 @@ datasource db {
   provider = "mysql"
 }
 
-enum Peran {
-  ADMIN
-  SISWA
-}
-
-enum Kesulitan {
-  MUDAH  @map("Mudah")
-  SEDANG @map("Sedang")
-  SULIT  @map("Sulit")
-}
-
-enum JenisKonten {
-  PENGENALAN   @map("Pengenalan")
-  MATERI_UTAMA @map("Materi Utama")
-  LATIHAN      @map("Latihan")
-}
-
 model pengguna {
-  id_pengguna BigInt   @id @default(autoincrement())
-  nama        String
-  surel       String   @unique
-  kata_sandi  String
-  bio         String?  @db.Text
-  peran       Peran    @default(SISWA)
-  kelas       Int?     // Kelas untuk siswa (1-6 SD)
-  aktif       Boolean  @default(true)
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
-
-  progres_latihan progres_latihan[]
-  notifikasi      notifikasi[]
+  id_pengguna     BigInt            @id @default(autoincrement())
+  nama            String
+  surel           String            @unique
+  kata_sandi      String
+  bio             String?           @db.Text
+  peran           Peran             @default(SISWA)
+  aktif           Boolean           @default(true)
+  created_at      DateTime          @default(now())
+  updated_at      DateTime          @updatedAt
+  kelas           Int?
   aktivitas       aktivitas[]
+  notifikasi      notifikasi[]
+  progres_latihan progres_latihan[]
+  progres_materi  progres_materi[]
 
   @@map("pengguna")
 }
 
 model latihan {
-  id_latihan       BigInt   @id @default(autoincrement())
+  id_latihan       BigInt            @id @default(autoincrement())
   judul            String
-  deskripsi        String   @db.Text
+  deskripsi        String            @db.Text
   ikon             String?
   warna            String?
-  total_pertanyaan Int      @default(0)
-  aktif            Boolean  @default(true)
-  created_at       DateTime @default(now())
-  updated_at       DateTime @updatedAt
-
-  // Relasi
+  total_pertanyaan Int               @default(0)
+  aktif            Boolean           @default(true)
+  created_at       DateTime          @default(now())
+  updated_at       DateTime          @updatedAt
   pertanyaan       pertanyaan[]
   progres_pengguna progres_latihan[]
 
@@ -77,6 +58,20 @@ model materi_generated {
   @@map("materi_generated")
 }
 
+model progres_materi {
+  id_pengguna BigInt
+  id_materi   String
+  created_at  DateTime         @default(now())
+  id          String           @id @default(cuid())
+  selesai_at  DateTime         @default(now())
+  materi      materi_generated @relation(fields: [id_materi], references: [id])
+  pengguna    pengguna         @relation(fields: [id_pengguna], references: [id_pengguna])
+
+  @@unique([id_pengguna, id_materi])
+  @@index([id_materi], map: "progres_materi_id_materi_fkey")
+  @@map("progres_materi")
+}
+
 model pertanyaan {
   id_pertanyaan   BigInt   @id @default(autoincrement())
   id_latihan      BigInt?
@@ -88,6 +83,7 @@ model pertanyaan {
   jalur_gambar    String?
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
+  latihan         latihan  @relation(fields: [id_latihan], references: [id_latihan])
 
   latihan latihan? @relation(fields: [id_latihan], references: [id_latihan])
 
@@ -102,10 +98,11 @@ model progres_latihan {
   selesai     DateTime?
   created_at  DateTime  @default(now())
   updated_at  DateTime  @updatedAt
+  latihan     latihan   @relation(fields: [id_latihan], references: [id_latihan])
+  pengguna    pengguna  @relation(fields: [id_pengguna], references: [id_pengguna])
 
-  pengguna pengguna @relation(fields: [id_pengguna], references: [id_pengguna])
-  latihan  latihan  @relation(fields: [id_latihan], references: [id_latihan])
-
+  @@index([id_latihan], map: "progres_latihan_id_latihan_fkey")
+  @@index([id_pengguna], map: "progres_latihan_id_pengguna_fkey")
   @@map("progres_latihan")
 }
 
@@ -117,21 +114,26 @@ model notifikasi {
   pesan         String   @db.Text
   dibaca        Boolean  @default(false)
   created_at    DateTime @default(now())
+  pengguna      pengguna @relation(fields: [id_pengguna], references: [id_pengguna])
 
-  pengguna pengguna @relation(fields: [id_pengguna], references: [id_pengguna])
-
+  @@index([id_pengguna], map: "notifikasi_id_pengguna_fkey")
   @@map("notifikasi")
 }
 
 model aktivitas {
-  id_aktivitas BigInt   @id @default(autoincrement())
+  id_aktivitas BigInt    @id @default(autoincrement())
   id_pengguna  BigInt?
   judul        String
-  deskripsi    String   @db.Text
+  deskripsi    String    @db.Text
   tipe         String
-  created_at   DateTime @default(now())
+  created_at   DateTime  @default(now())
+  pengguna     pengguna? @relation(fields: [id_pengguna], references: [id_pengguna])
 
-  pengguna pengguna? @relation(fields: [id_pengguna], references: [id_pengguna])
-
+  @@index([id_pengguna], map: "aktivitas_id_pengguna_fkey")
   @@map("aktivitas")
+}
+
+enum Peran {
+  ADMIN
+  SISWA
 }
