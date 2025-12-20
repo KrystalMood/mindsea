@@ -35,44 +35,11 @@ model pengguna {
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
 
-  progres_materi  progres_materi[]
   progres_latihan progres_latihan[]
   notifikasi      notifikasi[]
   aktivitas       aktivitas[]
 
   @@map("pengguna")
-}
-
-model materi {
-  id_materi         BigInt    @id @default(autoincrement())
-  judul             String
-  deskripsi         String    @db.Text
-  tingkat_kesulitan Kesulitan @default(MUDAH)
-  aktif             Boolean   @default(true)
-  created_at        DateTime  @default(now())
-  updated_at        DateTime  @updatedAt
-
-  konten           konten_materi[]
-  progres_pengguna progres_materi[]
-
-  @@map("materi")
-}
-
-model konten_materi {
-  id_konten    BigInt      @id @default(autoincrement())
-  id_materi    BigInt
-  jenis_konten JenisKonten
-  judul        String
-  isi_konten   String      @db.Text
-  teks_audio   String?     @db.Text
-  jalur_gambar String?
-  jalur_video  String?
-  created_at   DateTime    @default(now())
-  updated_at   DateTime    @updatedAt
-
-  materi materi @relation(fields: [id_materi], references: [id_materi])
-
-  @@map("konten_materi")
 }
 
 model latihan {
@@ -93,6 +60,21 @@ model latihan {
   @@map("latihan")
 }
 
+model materi_generated {
+  id           String   @id @default(cuid())
+  judul        String
+  prompt       String   @db.Text
+  konten       String   @db.Text
+  model        String
+  audience     String?
+  format       String   @default("markdown")
+  created_by   BigInt?
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  @@map("materi_generated")
+}
+
 model pertanyaan {
   id_pertanyaan   BigInt   @id @default(autoincrement())
   id_latihan      BigInt
@@ -106,23 +88,6 @@ model pertanyaan {
   latihan latihan @relation(fields: [id_latihan], references: [id_latihan])
 
   @@map("pertanyaan")
-}
-
-model progres_materi {
-  id_progres   BigInt    @id @default(autoincrement())
-  id_pengguna  BigInt
-  id_materi    BigInt
-  mulai        Boolean   @default(false)
-  selesai      Boolean   @default(false)
-  selesai_pada DateTime?
-  created_at   DateTime  @default(now())
-  updated_at   DateTime  @updatedAt
-
-  pengguna pengguna @relation(fields: [id_pengguna], references: [id_pengguna])
-  materi   materi   @relation(fields: [id_materi], references: [id_materi])
-
-  @@unique([id_pengguna, id_materi])
-  @@map("progres_materi")
 }
 
 model progres_latihan {
