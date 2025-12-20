@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <strong>Mindsea</strong> adalah platform pembelajaran inklusif yang dirancang khusus untuk membantu anak-anak berkebutuhan khusus mendapatkan akses pendidikan yang layak dan setara di Indonesia.
+  <strong>Mindsea</strong> adalah platform pembelajaran inklusif yang dirancang khusus untuk membantu anak-anak berkebutuhan khusus (tuna netra) mendapatkan akses pendidikan yang layak dan setara di Indonesia.
 </p>
 
 ---
