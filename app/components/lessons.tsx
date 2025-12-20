@@ -4,14 +4,14 @@ import { Volume2 } from "lucide-react";
 import { lessons } from "@/app/constants/lessons";
 import Link from "next/link";
 
-export default function Lessons() {
+export default function Lessons({ activeIndex }: { activeIndex: number }) {
   return (
     <section className="mx-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
       {lessons.map((lesson, id) => (
         <Link
           href={lesson.url}
           key={id}
-          className="group relative overflow-hidden rounded-3xl border border-slate-100 bg-white p-8 shadow-sm"
+          className={`group relative overflow-hidden rounded-3xl border bg-white p-8 shadow-sm transition-all ${activeIndex === id + 1 ? "ring-2 ring-blue-400 border-transparent" : "border-slate-100"}`}
         >
           <span className={`absolute -top-4 -right-4 h-24 w-24 rounded-full opacity-10 ${id === 0 ? "bg-blue-500" : "bg-emerald-500"}`} />
           <figure className="relative z-10">

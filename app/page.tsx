@@ -1,30 +1,19 @@
 import { Metadata } from "next";
-import Hero from "@/app/components/hero";
-import Lessons from "@/app/components/lessons";
-import Progress from "@/app/components/progress";
-
-export const dynamic = "force-dynamic";
+import Client from "@/app/client/home";
 
 export const metadata: Metadata = {
-  title: "Dasbor | Mindsea",
-  description: "Dasbor aplikasi Mindsea",
+  title: "Beranda | Mindsea",
+  description: "Platform pembelajaran interaktif untuk anak berkebutuhan khusus.",
   openGraph: {
-    title: "Dasbor | Mindsea",
-    description: "Dasbor aplikasi Mindsea",
+    title: "Beranda | Mindsea",
+    description: "Platform pembelajaran interaktif untuk anak berkebutuhan khusus.",
   },
   twitter: {
-    title: "Dasbor | Mindsea",
-    description: "Dasbor aplikasi Mindsea",
+    title: "Beranda | Mindsea",
+    description: "Platform pembelajaran interaktif untuk anak berkebutuhan khusus.",
   },
 };
 
-export default function Home() {
-  return (
-    <>
-      <span className="absolute inset-0 -z-10 bg-[url('/images/motion-grid.svg')] mask-[linear-gradient(180deg,white,rgba(255,255,255,0))] bg-center opacity-10" />
-      <Hero />
-      <Lessons />
-      <Progress />
-    </>
-  );
+export default function Page() {
+  return <Client />;
 }
