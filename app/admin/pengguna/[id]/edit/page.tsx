@@ -1,5 +1,19 @@
 import Hero from "./components/hero";
 import Form from "./components/form";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Edit Pengguna | Mindsea",
+  description: "Halaman edit pengguna untuk admin Mindsea.",
+  openGraph: {
+    title: "Edit Pengguna | Mindsea",
+    description: "Halaman edit pengguna untuk admin Mindsea.",
+  },
+  twitter: {
+    title: "Edit Pengguna | Mindsea",
+    description: "Halaman edit pengguna untuk admin Mindsea.",
+  },
+};
 
 export default function EditPengguna() {
   return (

@@ -10,17 +10,17 @@ type Input = {
   required: boolean;
   type: "text" | "date" | "email" | "file" | "password" | "number";
   value?: string | number | readonly string[] | undefined;
-}
+};
 
 type Select = {
   label: string;
   name: string;
   info?: string | null;
-  onChange?: ((value: string) => void);
+  onChange?: (value: string) => void;
   options: Array<{ label: string; value: string }>;
   required: boolean;
   value?: string;
-}
+};
 
 type Sidebar = {
   href?: string;
@@ -36,16 +36,20 @@ type Table = {
   rows: ReactNode[][];
   sortable: string[];
   itemsPerPage?: number;
-}
+};
 
 type TextArea = {
   label: string;
   name: string;
+  info?: string | null;
+  rows?: number;
+  minLength?: number;
   maxLength?: number;
   onChange?: ChangeEventHandler<HTMLTextAreaElement>;
   placeholder?: string;
   required: boolean;
   value?: string;
-}
+  disabled?: boolean;
+};
 
 export type { Input, Select, Sidebar, Table, TextArea };

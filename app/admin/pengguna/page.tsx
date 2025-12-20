@@ -1,6 +1,20 @@
 import { Prisma } from "@/lib/prisma";
+import { Metadata } from "next";
 import Hero from "./components/hero";
 import UserTable from "./components/user-table";
+
+export const metadata: Metadata = {
+  title: "Pengguna | Mindsea",
+  description: "Halaman pengguna untuk admin Mindsea.",
+  openGraph: {
+    title: "Pengguna | Mindsea",
+    description: "Halaman pengguna untuk admin Mindsea.",
+  },
+  twitter: {
+    title: "Pengguna | Mindsea",
+    description: "Halaman pengguna untuk admin Mindsea.",
+  },
+};
 
 async function getUsers() {
   const users = await Prisma.pengguna.findMany({
@@ -10,6 +24,7 @@ async function getUsers() {
       nama: true,
       surel: true,
       peran: true,
+      kelas: true,
       created_at: true,
     },
     orderBy: {
@@ -23,6 +38,7 @@ async function getUsers() {
     nama: user.nama,
     surel: user.surel,
     peran: user.peran,
+    kelas: user.kelas,
     created_at: user.created_at,
   }));
 }

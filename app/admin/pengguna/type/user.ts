@@ -5,6 +5,7 @@ type User = {
   nama: string;
   surel: string;
   peran: Peran;
+  kelas: number | null;
   created_at: Date;
 };
 export default User;

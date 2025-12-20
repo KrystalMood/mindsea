@@ -20,4 +20,10 @@ export const UsersSchema = z.object({
     .trim(),
   peran: z
     .enum(Object.values(Peran as unknown as [string, ...string[]]), { error: "Peran tidak valid." }),
+  kelas: z
+    .number({ error: "Kelas harus berupa angka." })
+    .min(1, { message: "Kelas minimal 1 SD." })
+    .max(6, { message: "Kelas maksimal 6 SD." })
+    .nullable()
+    .optional(),
 });
