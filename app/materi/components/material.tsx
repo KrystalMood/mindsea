@@ -1,24 +1,36 @@
 import MaterialCard from "@/app/materi/atoms/material-card";
+import { MaterialCard as IMaterialCard } from "@/app/materi/constants/themes";
 
-export default function Material({ activeIndex }: { activeIndex: number }) {
+interface MaterialProps {
+  materials: IMaterialCard[];
+  activeIndex?: number;
+}
+
+export default function Material({ materials, activeIndex }: MaterialProps) {
+  if (materials.length === 0) {
+    return (
+      <section className="m-8 py-12 text-center">
+        <p className="text-text-secondary">Belum ada materi tersedia</p>
+      </section>
+    );
+  }
   return (
     <section className="m-8 grid grid-cols-1 gap-8 lg:grid-cols-2">
-      <div className={activeIndex === 4 ? "ring-4 ring-green-400 rounded-3xl" : ""}>
-        <MaterialCard
-          title="Matematika Dasar"
-          description="Pengenalan konsep matematika dasar"
-          difficulty="Mudah"
-          colorTheme="green"
-        />
-      </div>
-      <div className={activeIndex === 5 ? "ring-4 ring-red-400 rounded-3xl" : ""}>
-        <MaterialCard
-          title="Ilmu Pengetahuan Alam"
-          description="Pengenalan konsep ilmu pengetahuan alam"
-          difficulty="Sulit"
-          colorTheme="red"
-        />
-      </div>
+      {materials.map((material, index) => {
+        const isActive = activeIndex === 4 + index;
+        return (
+          <MaterialCard
+            key={material.id}
+            id={material.id}
+            title={material.title}
+            description={material.description}
+            difficulty={material.difficulty}
+            colorTheme={material.colorTheme}
+            audience={material.audience}
+            isActive={isActive}
+          />
+        );
+      })}
     </section>
   );
 }

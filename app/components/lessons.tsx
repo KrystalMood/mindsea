@@ -1,6 +1,6 @@
 "use client";
 
-import { Volume2 } from "lucide-react";
+import { ChevronRight, Volume2 } from "lucide-react";
 import { lessons } from "@/app/constants/lessons";
 import Link from "next/link";
 
@@ -34,7 +34,7 @@ export default function Lessons({ activeIndex }: { activeIndex: number }) {
               <span className={`flex items-center gap-3 text-sm font-bold ${id === 0 ? "text-blue-600" : "text-emerald-600"}`}>
                 <h5>Mulai {id === 0 ? "Belajar" : "Latihan"}</h5>
                 <h5 className="transition-transform group-hover:translate-x-1">
-                  →
+                  <ChevronRight size={16} />
                 </h5>
               </span>
             </figcaption>
