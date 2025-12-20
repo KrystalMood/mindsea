@@ -43,17 +43,18 @@ model latihan {
 }
 
 model materi_generated {
-  id           String   @id @default(cuid())
+  id           String             @id @default(cuid())
   judul        String
-  prompt       String   @db.Text
-  konten       String   @db.Text
+  prompt       String             @db.Text
+  konten       String             @db.Text
   model        String
   audience     String?
-  kelas        Int?     // Kelas untuk siswa (1-6 SD)
-  format       String   @default("markdown")
+  kelas        Int?               // Kelas untuk siswa (1-6 SD)
+  format       String             @default("markdown")
   created_by   BigInt?
-  created_at   DateTime @default(now())
-  updated_at   DateTime @updatedAt
+  created_at   DateTime           @default(now())
+  updated_at   DateTime           @updatedAt
+  progres      progres_materi[]
 
   @@map("materi_generated")
 }
@@ -83,9 +84,7 @@ model pertanyaan {
   jalur_gambar    String?
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
-  latihan         latihan  @relation(fields: [id_latihan], references: [id_latihan])
-
-  latihan latihan? @relation(fields: [id_latihan], references: [id_latihan])
+  latihan         latihan? @relation(fields: [id_latihan], references: [id_latihan])
 
   @@map("pertanyaan")
 }

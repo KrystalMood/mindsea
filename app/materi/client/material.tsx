@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { speak } from "@/utils/text-to-speech";
+import { speak } from "@/lib/text-to-speech";
 import Hero from "@/app/materi/components/hero";
 import Statistics from "@/app/materi/components/statistics";
 import Material from "@/app/materi/components/material";
