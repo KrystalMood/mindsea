@@ -1,6 +1,6 @@
 import { Sidebar as ISidebar } from "@/types/components";
-import { BarChart, BookOpen, Home, LayoutDashboard, PenTool, Users } from "lucide-react";
-import { ADMIN_DASHBOARD, ADMIN_MATERIAL, ADMIN_QUIZZES, ADMIN_USERS, STUDENT_DASHBOARD, STUDENT_MATERIAL, STUDENT_PROGRESS, STUDENT_QUIZZES } from "@/constants/route";
+import { BarChart, Bell, BookOpen, ClipboardList, ClipboardPlus, FilePlus, Home, LayoutDashboard, List, PenTool, Users } from "lucide-react";
+import { ADMIN_DASHBOARD, ADMIN_MATERIAL, ADMIN_MATERIAL_ADD, ADMIN_QUIZZES, ADMIN_QUIZZES_ADD, ADMIN_USERS, STUDENT_DASHBOARD, STUDENT_MATERIAL, STUDENT_NOTIFICATIONS, STUDENT_PROGRESS, STUDENT_QUIZZES } from "@/constants/route";
 import { Peran } from "@/lib/generated/prisma";
 
 const Sidebar: Record<Peran, ISidebar[]> = {
@@ -16,20 +16,38 @@ const Sidebar: Record<Peran, ISidebar[]> = {
       label: "Pengguna",
     },
     {
-      label: "Konten Belajar",
+      label: "Materi",
+      href: ADMIN_MATERIAL,
       icon: <BookOpen className="h-5 w-5" />,
       subMenu: [
         {
           href: ADMIN_MATERIAL,
-          icon: <BookOpen className="h-4 w-4" />,
-          label: "Materi",
+          icon: <List className="h-5 w-5" />,
+          label: "Daftar",
         },
         {
-          href: ADMIN_QUIZZES,
-          icon: <PenTool className="h-4 w-4" />,
-          label: "Soal",
+          href: ADMIN_MATERIAL_ADD,
+          icon: <FilePlus className="h-5 w-5" />,
+          label: "Tambah",
         },
-      ],
+      ]
+    },
+    {
+      label: "Soal",
+      href: ADMIN_QUIZZES,
+      icon: <PenTool className="h-5 w-5" />,
+      subMenu: [
+        {
+          href: ADMIN_QUIZZES,
+          icon: <ClipboardList className="h-5 w-5" />,
+          label: "Daftar",
+        },
+        {
+          href: ADMIN_QUIZZES_ADD,
+          icon: <ClipboardPlus className="h-5 w-5" />,
+          label: "Tambah",
+        }
+      ]
     },
   ],
   SISWA: [

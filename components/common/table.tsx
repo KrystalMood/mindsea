@@ -1,44 +1,79 @@
 "use client";
 
-import { ArrowDown, ArrowUp, ArrowUpDown, TriangleAlert } from "lucide-react";
+import {
+  ArrowDown,
+  ArrowUp,
+  ArrowUpDown,
+  TriangleAlert,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { type ReactNode, useState } from "react";
 import { Table as T } from "@/types/components";
 
-export default function Table({ headers, rows, sortable }: T) {
+export default function Table({
+  headers,
+  rows,
+  sortable,
+  itemsPerPage = 10,
+}: T) {
   const [sortedRows, setSortedRows] = useState<ReactNode[][]>(rows);
-  const [sortingItems, setSortingItems] = useState<{ index: number; ascending: boolean }>({ index: -1, ascending: true });
+  const [sortingItems, setSortingItems] = useState<{
+    index: number;
+    ascending: boolean;
+  }>({ index: -1, ascending: true });
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const isSortable = (header: string) => sortable.map((sort) => sort.toLowerCase()).includes(header.toLowerCase());
+  const isSortable = (header: string) =>
+    sortable.map((sort) => sort.toLowerCase()).includes(header.toLowerCase());
 
   const handleSort = (index: number) => {
-    const ascending = sortingItems.index === index ? !sortingItems.ascending : true;
+    const ascending =
+      sortingItems.index === index ? !sortingItems.ascending : true;
     setSortingItems({ index, ascending });
 
-    setSortedRows([...rows].sort((a, b) => {
-      const valA = String(a[index]).toLowerCase();
-      const valB = String(b[index]).toLowerCase();
-      return ascending ? valA.localeCompare(valB) : valB.localeCompare(valA);
-    }));
+    setSortedRows(
+      [...rows].sort((a, b) => {
+        const valA = String(a[index]).toLowerCase();
+        const valB = String(b[index]).toLowerCase();
+        return ascending ? valA.localeCompare(valB) : valB.localeCompare(valA);
+      }),
+    );
   };
 
   const displayedRows = sortingItems.index === -1 ? rows : sortedRows;
+  const totalPages = Math.ceil(displayedRows.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedRows = displayedRows.slice(
+    startIndex,
+    startIndex + itemsPerPage,
+  );
 
   return (
-    <div className="border-primary relative mb-6 w-full overflow-x-auto rounded-lg border">
-      <table className="w-full min-w-max table-auto border-collapse cursor-default">
-        <thead className="bg-primary text-white">
+    <div className="border-border relative w-full overflow-x-auto rounded-xl border bg-white">
+      <table className="w-full min-w-max table-auto">
+        <thead className="bg-primary/5 text-heading">
           <tr>
             {headers.map((header, i) => (
-              <th key={i} className={`w-1/${headers.length} px-6 py-4 text-right font-medium`}>
+              <th key={i} className="px-5 py-4 text-center font-medium">
                 {isSortable(header) ? (
-                  <span onClick={() => handleSort(i)} className="flex cursor-pointer items-center justify-center text-xs font-medium whitespace-nowrap lg:text-sm">
+                  <span
+                    onClick={() => handleSort(i)}
+                    className="inline-flex cursor-pointer items-center text-xs font-medium whitespace-nowrap lg:text-sm"
+                  >
                     <h5 className="mr-2">{header}</h5>
-                    {sortingItems.index !== i ? <ArrowUpDown size={14} /> : sortingItems.ascending ? <ArrowUp size={14} /> : <ArrowDown size={14} />}
+                    {sortingItems.index !== i ? (
+                      <ArrowUpDown size={14} />
+                    ) : sortingItems.ascending ? (
+                      <ArrowUp size={14} />
+                    ) : (
+                      <ArrowDown size={14} />
+                    )}
                   </span>
                 ) : (
-                  <h5 className="flex items-center justify-center text-xs font-medium whitespace-nowrap lg:text-sm">
+                  <span className="text-xs font-medium whitespace-nowrap lg:text-sm">
                     {header}
-                  </h5>
+                  </span>
                 )}
               </th>
             ))}
@@ -47,22 +82,31 @@ export default function Table({ headers, rows, sortable }: T) {
         <tbody>
           {displayedRows.length === 0 ? (
             <tr>
-              <td colSpan={headers.length} className="py-12 text-center text-gray-500">
+              <td
+                colSpan={headers.length}
+                className="text-text-secondary py-12 text-center"
+              >
                 <span className="flex flex-col items-center justify-center gap-2">
-                  <TriangleAlert className="text-yellow-400" size={40} />
-                  <h5 className="text-sm font-semibold text-slate-800">
+                  <TriangleAlert className="text-accent" size={40} />
+                  <p className="text-heading text-sm font-semibold">
                     Tidak ada data, yuk isi dulu!
-                  </h5>
+                  </p>
                 </span>
               </td>
             </tr>
           ) : (
-            displayedRows.map((rows, rowIndex) => (
-              <tr key={rowIndex} className="border-primary border-t text-sm transition-all duration-200">
-                {rows.map((cells, cellIndex) => (
-                  <td key={cellIndex} className="px-6 py-3 whitespace-nowrap">
-                    <span className="flex cursor-default items-center justify-center space-x-3 text-sm">
-                      {cells}
+            paginatedRows.map((rows, rowIndex) => (
+              <tr
+                key={rowIndex}
+                className="border-border hover:bg-primary/5 border-t text-sm transition-all"
+              >
+                {rows.map((cell, cellIndex) => (
+                  <td
+                    key={cellIndex}
+                    className={`text-text-secondary px-5 py-4 text-center ${cellIndex === 0 || cellIndex === headers.length - 1 ? "w-20" : ""}`}
+                  >
+                    <span className="inline-flex items-center justify-center text-sm">
+                      {cell}
                     </span>
                   </td>
                 ))}
@@ -71,6 +115,35 @@ export default function Table({ headers, rows, sortable }: T) {
           )}
         </tbody>
       </table>
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="border-border flex items-center justify-between border-t px-5 py-4">
+          <p className="text-text-secondary text-sm">
+            Menampilkan {startIndex + 1}-
+            {Math.min(startIndex + itemsPerPage, displayedRows.length)} dari{" "}
+            {displayedRows.length} data
+          </p>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="border-border hover:bg-primary/5 rounded-lg border p-2 transition-all disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <ChevronLeft size={16} />
+            </button>
+            <span className="text-heading text-sm font-medium">
+              {currentPage} / {totalPages}
+            </span>
+            <button
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+              className="border-border hover:bg-primary/5 rounded-lg border p-2 transition-all disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <ChevronRight size={16} />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
