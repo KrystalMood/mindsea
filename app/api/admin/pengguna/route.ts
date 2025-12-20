@@ -22,7 +22,7 @@ export async function POST(
       );
     }
 
-    const { nama, surel, kata_sandi, peran } = validate.data;
+    const { nama, surel, kata_sandi, peran, kelas } = validate.data;
 
     const existingUser = await Prisma.pengguna.findFirst({
       where: {
@@ -49,6 +49,7 @@ export async function POST(
         surel,
         kata_sandi: hashedPassword,
         peran: peran as Peran,
+        kelas: peran === "SISWA" ? kelas : null,
         aktif: true,
       },
     });

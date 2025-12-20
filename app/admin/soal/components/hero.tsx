@@ -1,32 +1,29 @@
-import { LuPenTool, LuPlus } from "react-icons/lu";
+"use client";
+
+import { LuBookOpen, LuPlus } from "react-icons/lu";
+import { ADMIN_QUIZZES_ADD } from "@/constants/route";
 import Link from "next/link";
 
 export default function Hero() {
   return (
-    <>
-      {/* Hero Banner */}
-      <section className="border-secondary/20 from-primary/5 to-secondary/5 mx-6 mt-6 flex flex-col gap-4 rounded-xl border bg-gradient-to-r p-6 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-4">
-          <div className="bg-primary/10 text-primary flex h-12 w-12 items-center justify-center rounded-xl">
-            <LuPenTool size={24} />
-          </div>
-          <div>
-            <h1 className="text-heading text-xl font-semibold">Kelola Soal</h1>
-            <p className="text-text-secondary text-sm">
-              Manajemen data soal latihan Mindsea
-            </p>
-          </div>
+    <header className="mx-6 mt-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+      <div className="flex items-center gap-4">
+        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white shadow-md shadow-indigo-100">
+          <LuBookOpen size={28} />
         </div>
-
-        {/* Tambah Soal */}
-        <Link
-          href="/admin/soal/tambah"
-          className="bg-primary hover:bg-primary/90 flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-medium text-white transition-all hover:shadow-md"
-        >
-          <LuPlus size={18} />
-          <span>Tambah Soal</span>
-        </Link>
-      </section>
-    </>
+        <div className="space-y-0.5">
+          <h1 className="text-xl font-bold tracking-tight text-slate-800">
+            Kelola Soal
+          </h1>
+          <p className="text-xs font-medium text-slate-500">
+            Manajemen latihan soal di platform Mindsea
+          </p>
+        </div>
+      </div>
+      <Link href={ADMIN_QUIZZES_ADD} className="flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-4.5 py-3 text-xs font-bold text-white shadow-md shadow-indigo-100 transition-all hover:brightness-110 active:scale-95">
+        <LuPlus size={18} />
+        Tambah Materi Baru
+      </Link>
+    </header>
   );
 }

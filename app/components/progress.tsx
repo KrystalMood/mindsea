@@ -3,7 +3,7 @@
 import { BookCheck, Volume2 } from "lucide-react";
 import { stats } from "@/app/constants/progress";
 
-export default function Progress() {
+export default function Progress({ activeIndex }: { activeIndex: number }) {
   return (
     <section className="m-8 flex flex-col gap-6">
       <article className="flex cursor-default items-center gap-4">
@@ -21,7 +21,7 @@ export default function Progress() {
       </article>
       <article className="grid grid-cols-1 gap-6 md:grid-cols-3">
         {stats.map((stat, index) => (
-          <figure key={index} className={`group relative flex flex-col justify-between rounded-3xl border ${stat.borderColor} bg-white p-6 transition-all hover:shadow-md`}>
+          <figure key={index} className={`group relative flex flex-col justify-between rounded-3xl border ${stat.borderColor} bg-white p-6 transition-all hover:shadow-md ${activeIndex === index + 3 ? "ring-2 ring-blue-400 border-transparent" : ""}`}>
             <figcaption>
               <div className="mb-6 flex items-center gap-3">
                 <span className={`rounded-xl ${stat.bgColor} ${stat.color} p-2`}>

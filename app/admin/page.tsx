@@ -5,14 +5,14 @@ import RecentActivities from "./components/recent-activities";
 import QuickActions from "./components/quick-actions";
 
 export const metadata: Metadata = {
-  title: "Dasbor Admin | Mindsea",
+  title: "Dasbor | Mindsea Admin",
   description: "Halaman dasbor untuk admin Mindsea.",
   openGraph: {
-    title: "Dasbor Admin | Mindsea",
+    title: "Dasbor | Mindsea Admin",
     description: "Halaman dasbor untuk admin Mindsea.",
   },
   twitter: {
-    title: "Dasbor Admin | Mindsea",
+    title: "Dasbor | Mindsea Admin",
     description: "Halaman dasbor untuk admin Mindsea.",
   },
 };

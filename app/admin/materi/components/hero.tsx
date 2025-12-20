@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function Hero() {
   return (
-    <section className="border-secondary/20 from-primary/5 to-secondary/5 mx-6 mt-6 flex flex-col gap-4 rounded-xl border bg-gradient-to-r p-6 sm:flex-row sm:items-center sm:justify-between">
+    <header className="mx-6 mt-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
       <div className="flex items-center gap-4">
         <div className="bg-primary/10 text-primary flex h-12 w-12 items-center justify-center rounded-xl">
           <BookOpen size={24} />
@@ -23,6 +23,6 @@ export default function Hero() {
         <LucidePlus size={18} />
         <span>Tambah Materi</span>
       </Link>
-    </section>
+    </header>
   );
 }
