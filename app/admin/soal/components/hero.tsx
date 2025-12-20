@@ -22,7 +22,7 @@ export default function Hero() {
       </div>
       <Link href={ADMIN_QUIZZES_ADD} className="flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-4.5 py-3 text-xs font-bold text-white shadow-md shadow-indigo-100 transition-all hover:brightness-110 active:scale-95">
         <LuPlus size={18} />
-        Tambah Materi Baru
+        Generate Soal dengan AI
       </Link>
     </header>
   );
