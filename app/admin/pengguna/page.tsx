@@ -15,7 +15,7 @@ export default function Pengguna() {
     <>
       <span className="pointer-events-none absolute inset-0 -z-10 bg-[url('/images/motion-grid.svg')] mask-[linear-gradient(180deg,white,rgba(255,255,255,0))] bg-center opacity-5" />
       <Hero />
-      <section className="m-8">
+      <section className="border-border mx-6 mt-6 rounded-xl border bg-white p-6">
         <Table
           headers={["No", "Nama Siswa", "Kelas", "Aksi"]}
           rows={rows}
