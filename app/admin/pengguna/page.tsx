@@ -24,6 +24,7 @@ async function getUsers() {
       nama: true,
       surel: true,
       peran: true,
+      kelas: true,
       created_at: true,
     },
     orderBy: {
@@ -37,6 +38,7 @@ async function getUsers() {
     nama: user.nama,
     surel: user.surel,
     peran: user.peran,
+    kelas: user.kelas,
     created_at: user.created_at,
   }));
 }

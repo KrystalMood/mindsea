@@ -20,6 +20,7 @@ export default function Form() {
     surel: "",
     kata_sandi: "",
     peran: "SISWA",
+    kelas: "1",
   });
 
   useEffect(() => {
@@ -31,6 +32,7 @@ export default function Form() {
           surel: response.data.surel,
           kata_sandi: "",
           peran: response.data.peran,
+          kelas: response.data.kelas?.toString() || "1",
         });
       } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -64,6 +66,7 @@ export default function Form() {
         surel: formData.surel,
         peran: formData.peran,
         ...(formData.kata_sandi && { kata_sandi: formData.kata_sandi }),
+        ...(formData.peran === "SISWA" && { kelas: parseInt(formData.kelas) }),
       };
 
       await axios.put(`/api/admin/pengguna/${userId}`, payload);
@@ -142,6 +145,25 @@ export default function Form() {
           onChange={(value) => setFormData({ ...formData, peran: value })}
           required
         />
+
+        {/* Select Kelas - hanya ditampilkan jika peran SISWA */}
+        {formData.peran === "SISWA" && (
+          <Select
+            label="Kelas"
+            name="kelas"
+            options={[
+              { value: "1", label: "Kelas 1 SD" },
+              { value: "2", label: "Kelas 2 SD" },
+              { value: "3", label: "Kelas 3 SD" },
+              { value: "4", label: "Kelas 4 SD" },
+              { value: "5", label: "Kelas 5 SD" },
+              { value: "6", label: "Kelas 6 SD" },
+            ]}
+            value={formData.kelas}
+            onChange={(value) => setFormData({ ...formData, kelas: value })}
+            required
+          />
+        )}
 
         <button
           type="submit"

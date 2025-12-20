@@ -1,7 +1,5 @@
 import { Metadata } from "next";
-import Hero from "@/app/latihan-soal/components/hero";
-import Statistics from "@/app/latihan-soal/components/statistics";
-import Exercise from "./components/exercise";
+import Client from "@/app/latihan-soal/client/exercise";
 
 export const dynamic = "force-dynamic";
 
@@ -19,12 +17,5 @@ export const metadata: Metadata = {
 };
 
 export default function Latihan() {
-  return (
-    <>
-      <span className="pointer-events-none absolute inset-0 -z-10 bg-[url('/images/motion-grid.svg')] mask-[linear-gradient(180deg,white,rgba(255,255,255,0))] bg-center opacity-5" />
-      <Hero />
-      <Statistics />
-      <Exercise />
-    </>
-  );
+  return <Client />;
 }

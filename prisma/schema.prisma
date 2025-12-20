@@ -31,6 +31,7 @@ model pengguna {
   kata_sandi  String
   bio         String?  @db.Text
   peran       Peran    @default(SISWA)
+  kelas       Int?     // Kelas untuk siswa (1-6 SD)
   aktif       Boolean  @default(true)
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt

@@ -17,6 +17,7 @@ export default function Form() {
     surel: "",
     kata_sandi: "",
     peran: "SISWA",
+    kelas: "1",
   });
 
   const handleChange = (
@@ -102,6 +103,25 @@ export default function Form() {
           onChange={(value) => setFormData({ ...formData, peran: value })}
           required
         />
+
+        {/* Select Kelas - hanya ditampilkan jika peran SISWA */}
+        {formData.peran === "SISWA" && (
+          <Select
+            label="Kelas"
+            name="kelas"
+            options={[
+              { value: "1", label: "Kelas 1 SD" },
+              { value: "2", label: "Kelas 2 SD" },
+              { value: "3", label: "Kelas 3 SD" },
+              { value: "4", label: "Kelas 4 SD" },
+              { value: "5", label: "Kelas 5 SD" },
+              { value: "6", label: "Kelas 6 SD" },
+            ]}
+            value={formData.kelas}
+            onChange={(value) => setFormData({ ...formData, kelas: value })}
+            required
+          />
+        )}
 
         {/* Submit Button */}
         <button
