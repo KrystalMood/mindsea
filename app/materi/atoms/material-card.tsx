@@ -2,12 +2,13 @@
 
 import { BookOpen, Volume2, MoveRight, Info } from "lucide-react";
 import { MaterialCard as IMaterialCard, themes } from "@/app/materi/constants/themes";
+import Link from "next/link";
 
 export default function MaterialCard({ title, description, difficulty, colorTheme }: IMaterialCard) {
   const activeTheme = themes[colorTheme];
 
   return (
-    <figure className={`group relative flex flex-col rounded-3xl border-2 ${activeTheme.border} bg-white p-6 transition-all duration-300 hover:shadow-xl ${activeTheme.shadow} overflow-hidden hover:-translate-y-1`}>
+    <figure className={`group relative flex flex-col rounded-3xl border-2 ${activeTheme.border} bg-white p-6 transition-all duration-300 ${activeTheme.shadow} overflow-hidden`}>
       <span className={`absolute -top-4 -right-4 h-32 w-32 rounded-full opacity-20 transition-transform duration-500 group-hover:scale-150 ${activeTheme.icon.split(" ")[0]}`} />
       <div className="relative z-10 mb-4 flex items-start justify-between">
         <span className={`flex h-12 w-12 items-center justify-center rounded-xl ${activeTheme.icon} transition-transform group-hover:scale-105`}>
@@ -31,10 +32,10 @@ export default function MaterialCard({ title, description, difficulty, colorThem
           <Volume2 size={12} />
           Dengarkan
         </button>
-        <button className={`mt-6 flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg text-sm ${activeTheme.btn} py-3.5 font-bold text-white shadow-md transition-all duration-300 ease-in-out hover:brightness-105 active:scale-[0.98]`}>
+        <Link href={title.toLowerCase().replace(/ /g, "-")} className={`mt-6 flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg text-sm ${activeTheme.btn} py-3.5 font-bold text-white shadow-md transition-all duration-300 ease-in-out hover:brightness-105 active:scale-[0.98]`}>
           Mulai
           <MoveRight size={18} className="transition-all duration-300 ease-in-out group-hover:translate-x-1" />
-        </button>
+        </Link>
       </span>
     </figure>
   );

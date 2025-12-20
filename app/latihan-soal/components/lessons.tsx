@@ -1,7 +1,7 @@
 "use client";
 
 import { Calculator, Volume2, MoveRight } from "lucide-react";
-import { speak } from "@/lib/text-to-speech";
+import { speak } from "@/utils/text-to-speech";
 
 export default function Lessons({ data, activeIndex }: { data: { judul: string; deskripsi: string }[]; activeIndex: number }) {
   return (

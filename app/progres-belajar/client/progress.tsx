@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { speak } from "@/lib/text-to-speech";
+import { speak } from "@/utils/text-to-speech";
 import Hero from "@/app/progres-belajar/components/hero";
 import Statistics from "@/app/progres-belajar/components/statistics";
 import Chart from "@/app/progres-belajar/components/chart";
