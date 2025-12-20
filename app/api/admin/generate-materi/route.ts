@@ -39,7 +39,7 @@ interface ErrorResponse {
  * Admin-only endpoint with rate limiting
  */
 export async function POST(
-  request: NextRequest
+  request: NextRequest,
 ): Promise<NextResponse<GenerateMateriResponse | ErrorResponse>> {
   try {
     // === 1. Authentication Check ===
@@ -49,10 +49,12 @@ export async function POST(
     // TODO: Integrate with full auth system (check SESSION_TOKEN validity)
     // For now, checking if user role is ADMIN
     if (userRole !== Peran.ADMIN) {
-      console.warn("❌ Unauthorized access attempt to generate-materi endpoint");
+      console.warn(
+        "❌ Unauthorized access attempt to generate-materi endpoint",
+      );
       return NextResponse.json(
         { error: "Unauthorized", details: "Admin access required" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -78,7 +80,7 @@ export async function POST(
             "X-RateLimit-Remaining": "0",
             "X-RateLimit-Reset": rateLimitResult.resetAt.toString(),
           },
-        }
+        },
       );
     }
 
@@ -87,11 +89,12 @@ export async function POST(
     const validation = GenerateMateriSchema.safeParse(body);
 
     if (!validation.success) {
-      const errorMessage = validation.error.issues[0]?.message || "Invalid input";
+      const errorMessage =
+        validation.error.issues[0]?.message || "Invalid input";
       console.warn("❌ Invalid input:", errorMessage);
       return NextResponse.json(
         { error: "Validation failed", details: errorMessage },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -104,31 +107,63 @@ export async function POST(
     if (!apiKey) {
       console.error("❌ GOOGLE_API_KEY not configured");
       return NextResponse.json(
-        { error: "Server configuration error", details: "API key not configured" },
-        { status: 500 }
+        {
+          error: "Server configuration error",
+          details: "API key not configured",
+        },
+        { status: 500 },
       );
     }
 
     const genAI = new GoogleGenAI({ apiKey });
 
     // === 5. Construct Prompt with System Instructions ===
-    const systemInstruction = `Anda adalah asisten AI yang ahli dalam membuat materi pembelajaran yang komprehensif.
+    const systemInstruction = `
+Anda adalah penulis materi pembelajaran berbahasa Indonesia yang dirancang khusus agar nyaman dipahami oleh pengguna tunanetra melalui pembacaan Text-to-Speech (TTS) dan screen reader.
 
-**INSTRUKSI PENTING:**
-- Outputnya HARUS dalam format Markdown yang terstruktur dengan baik
-- Gunakan Bahasa Indonesia yang teknis namun mudah dipahami
-- Setiap materi pembelajaran HARUS mencakup bagian-bagian berikut:
+PRINSIP UTAMA (WAJIB DIPATUHI)
+1) Jangan menulis kalimat pembuka meta seperti “Berikut adalah…”, “Sebagai AI…”, “Materi ini dirancang…”, atau sejenisnya. Langsung mulai dari judul materi.
+2) Output WAJIB Markdown yang rapi, konsisten, dan mudah dibaca TTS.
+3) Fokus pada kejelasan dan kelengkapan. Tidak boleh ada kuis, soal pilihan ganda, atau bagian “Kuis/Latihan” berupa pertanyaan-pertanyaan evaluasi. Jika perlu latihan, buat “Latihan Praktik Terarah” yang berupa langkah kerja/proyek mini, bukan daftar pertanyaan.
+4) Hindari ketergantungan visual: jangan menulis “lihat gambar”, “pada diagram”, “di tabel”. Jika butuh ilustrasi, jelaskan dalam kata-kata secara naratif.
+5) TTS-friendly: gunakan kalimat relatif pendek, istilah teknis dijelaskan sekali saat pertama muncul, gunakan daftar bernomor untuk prosedur, dan hindari tabel Markdown (gunakan bullet/nomor sebagai pengganti).
+6) Personalisasi ringan untuk tunanetra: gunakan sapaan “kamu” secara netral, dan sisipkan tips praktis yang relevan seperti penggunaan screen reader, navigasi keyboard, atau strategi mendengarkan ulang bagian tertentu—tanpa terdengar seperti promosi fitur.
 
-1. **Judul** - Judul yang menarik dan deskriptif
-2. **Tujuan Pembelajaran** - 3-5 poin spesifik yang akan dicapai
-3. **Penjelasan Konsep** - Penjelasan mendalam dengan sub-bagian jika perlu
-4. **Contoh Praktis** - Minimal 2 contoh konkret dengan kode/ilustrasi
-5. **Kuis/Latihan** - 5 pertanyaan pilihan ganda dengan jawaban
-6. **Rangkuman** - Ringkasan poin-poin penting
+FORMAT STRUKTUR (WAJIB ADA SEMUA)
+- # Judul Materi (satu judul yang spesifik dan deskriptif)
+- ## Ringkasan Singkat (2–4 kalimat, langsung ke inti)
+- ## Tujuan Pembelajaran (3–6 poin, terukur)
+- ## Prasyarat (opsional, hanya jika memang perlu)
+- ## Konsep Inti (pecah menjadi subbagian dengan heading ###, jelaskan dari dasar ke lanjut)
+- ## Langkah demi Langkah (jika materi prosedural, pakai numbering 1,2,3…; jika konseptual, berikan alur “dari pengertian → alasan → cara kerja → konsekuensi”)
+- ## Contoh Praktis (minimal 2 contoh, konkret)
+    - Jika ada kode: 
+      - berikan blok kode,
+      - lalu jelaskan setelahnya secara naratif (apa tujuan kode, bagian pentingnya, dan cara memodifikasi),
+      - hindari komentar panjang di dalam kode; lebih baik jelaskan di luar blok kode.
+- ## Kesalahan Umum dan Cara Menghindarinya (minimal 5 poin, format bullet)
+- ## Rangkuman (5–10 bullet poin)
+- ## Glosarium (opsional, hanya istilah yang benar-benar penting)
 
-Pastikan konten edukatif, akurat, dan sesuai dengan tingkat audiens.`;
+GAYA BAHASA
+- Bahasa Indonesia teknis tapi mudah, hindari slang berlebihan.
+- Gunakan istilah konsisten (misal: “endpoint”, “request”, “response”).
+- Jangan gunakan emoji, ASCII art, atau pemisah dekoratif berlebihan.
+- Jangan membuat klaim yang tidak pasti. Jika ada hal yang bergantung konteks, tuliskan “umumnya”, “biasanya”, dan sebutkan syaratnya.
 
-    const userPrompt = `${audience ? `Target Audiens: ${audience}\n` : ""}${title ? `Judul Materi: ${title}\n` : ""}\nBuat materi pembelajaran tentang: ${prompt}`;
+ATURAN KONTEN
+- Materi harus akurat dan relevan dengan "Target Kelas" dan/atau "Judul Materi" bila diberikan.
+- Sesuaikan kedalaman materi berdasarkan tingkat kelas SD (usia 6-12 tahun):
+  - Kelas 1-2 SD (usia 6-8): Bahasa sangat sederhana, kalimat pendek-pendek, banyak analogi dari kehidupan sehari-hari, hindari istilah teknis, fokus pada pengenalan dasar.
+  - Kelas 3-4 SD (usia 8-10): Bahasa sederhana tapi mulai diperkenalkan istilah dasar dengan penjelasan, gunakan contoh konkret dari lingkungan sekitar, mulai perkenalkan konsep sebab-akibat.
+  - Kelas 5-6 SD (usia 10-12): Bahasa lebih formal tapi tetap mudah dipahami, boleh gunakan istilah teknis dengan definisi jelas, contoh bisa lebih abstrak, mulai perkenalkan konsep yang lebih kompleks dan hubungan antar-konsep.
+- Jangan menyertakan kuis atau pertanyaan evaluasi di akhir.
+
+OUTPUT FINAL
+Tulis hanya konten materi dalam Markdown sesuai struktur di atas. Tidak ada preface, tidak ada penjelasan meta, tidak ada penutup yang memuji pengguna.
+`;
+
+    const userPrompt = `${audience ? `Target Kelas: ${audience}\n` : ""}${title ? `Judul Materi: ${title}\n` : ""}\nBuat materi pembelajaran tentang: ${prompt}`;
 
     console.log("🚀 Generating material with Gemini...");
 
@@ -149,13 +184,14 @@ Pastikan konten edukatif, akurat, dan sesuai dengan tingkat audiens.`;
       },
     });
 
-    const generatedText = result.candidates?.[0]?.content?.parts?.[0]?.text || "";
+    const generatedText =
+      result.candidates?.[0]?.content?.parts?.[0]?.text || "";
 
     if (!generatedText) {
       console.error("❌ Empty response from Gemini");
       return NextResponse.json(
         { error: "Generation failed", details: "No content generated" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -163,9 +199,7 @@ Pastikan konten edukatif, akurat, dan sesuai dengan tingkat audiens.`;
 
     // === 7. Extract Title (if not provided) ===
     const finalTitle =
-      title ||
-      extractTitleFromMarkdown(generatedText) ||
-      "Materi Pembelajaran";
+      title || extractTitleFromMarkdown(generatedText) || "Materi Pembelajaran";
 
     // === 8. Save to Database ===
     const savedMaterial = await Prisma.materi_generated.create({
@@ -197,7 +231,7 @@ Pastikan konten edukatif, akurat, dan sesuai dengan tingkat audiens.`;
           "X-RateLimit-Remaining": rateLimitResult.remaining.toString(),
           "X-RateLimit-Reset": rateLimitResult.resetAt.toString(),
         },
-      }
+      },
     );
   } catch (error: unknown) {
     console.error("❌ Error in generate-materi:", error);
@@ -209,13 +243,16 @@ Pastikan konten edukatif, akurat, dan sesuai dengan tingkat audiens.`;
           error: "Generation failed",
           details: (error as Error).message,
         },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
     return NextResponse.json(
-      { error: "Internal server error", details: "An unexpected error occurred" },
-      { status: 500 }
+      {
+        error: "Internal server error",
+        details: "An unexpected error occurred",
+      },
+      { status: 500 },
     );
   }
 }

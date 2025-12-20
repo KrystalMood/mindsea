@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { IoSparkles, IoCopy, IoRefresh } from "react-icons/io5";
 
 interface GeneratedMaterial {
   id: string;
@@ -13,7 +14,6 @@ export default function TambahMateri() {
   const [prompt, setPrompt] = useState("");
   const [title, setTitle] = useState("");
   const [audience, setAudience] = useState("");
-  const [format, setFormat] = useState<"markdown" | "html">("markdown");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<GeneratedMaterial | null>(null);
@@ -34,7 +34,7 @@ export default function TambahMateri() {
           prompt: prompt.trim(),
           title: title.trim() || undefined,
           audience: audience.trim() || undefined,
-          format,
+          format: "markdown",
         }),
       });
 
@@ -58,22 +58,24 @@ export default function TambahMateri() {
   };
 
   return (
-    <div className="container mx-auto p-6 max-w-6xl">
+    <div className="container mx-auto max-w-6xl p-6">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Generate Materi Pembelajaran</h1>
+        <h1 className="mb-2 text-3xl font-bold">
+          Generate Materi Pembelajaran
+        </h1>
         <p className="text-gray-600">
           Gunakan AI untuk membuat materi pembelajaran secara otomatis
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* Form Section */}
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="rounded-lg bg-white p-6 shadow-md">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label
                 htmlFor="title"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="mb-1 block text-sm font-medium text-gray-700"
               >
                 Judul Materi (Opsional)
               </label>
@@ -82,8 +84,8 @@ export default function TambahMateri() {
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="Contoh: Pengenalan React Hooks"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Contoh: Matematika Dasar untuk kelas 1 SD"
+                className="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 disabled={loading}
               />
             </div>
@@ -91,71 +93,54 @@ export default function TambahMateri() {
             <div>
               <label
                 htmlFor="audience"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="mb-1 block text-sm font-medium text-gray-700"
               >
-                Target Audiens (Opsional)
+                Target Kelas (Opsional)
               </label>
               <select
                 id="audience"
                 value={audience}
                 onChange={(e) => setAudience(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 disabled={loading}
               >
-                <option value="">Pilih audiens...</option>
-                <option value="Pemula">Pemula</option>
-                <option value="Menengah">Menengah</option>
-                <option value="Lanjutan">Lanjutan</option>
-                <option value="Mahasiswa">Mahasiswa</option>
-                <option value="Profesional">Profesional</option>
-              </select>
-            </div>
-
-            <div>
-              <label
-                htmlFor="format"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Format Output
-              </label>
-              <select
-                id="format"
-                value={format}
-                onChange={(e) => setFormat(e.target.value as "markdown" | "html")}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                disabled={loading}
-              >
-                <option value="markdown">Markdown</option>
-                <option value="html">HTML</option>
+                <option value="">Pilih kelas...</option>
+                <option value="Kelas 1 SD">Kelas 1 SD</option>
+                <option value="Kelas 2 SD">Kelas 2 SD</option>
+                <option value="Kelas 3 SD">Kelas 3 SD</option>
+                <option value="Kelas 4 SD">Kelas 4 SD</option>
+                <option value="Kelas 5 SD">Kelas 5 SD</option>
+                <option value="Kelas 6 SD">Kelas 6 SD</option>
               </select>
             </div>
 
             <div>
               <label
                 htmlFor="prompt"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="mb-1 block text-sm font-medium text-gray-700"
               >
-                Prompt / Deskripsi Materi <span className="text-red-500">*</span>
+                Prompt / Deskripsi Materi{" "}
+                <span className="text-red-500">*</span>
               </label>
               <textarea
                 id="prompt"
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                placeholder="Contoh: Buatkan materi tentang cara menggunakan useState dan useEffect di React dengan contoh praktis..."
+                placeholder="Contoh: Buatkan materi tentang penjumlahan dan pengurangan bilangan 1-20, lengkap dengan contoh soal yang mudah dipahami anak SD kelas 1..."
                 rows={8}
                 required
                 minLength={5}
                 maxLength={4000}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-vertical"
+                className="resize-vertical w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 disabled={loading}
               />
-              <div className="text-sm text-gray-500 mt-1">
+              <div className="mt-1 text-sm text-gray-500">
                 {prompt.length} / 4000 karakter
               </div>
             </div>
 
             {error && (
-              <div className="p-3 bg-red-50 border border-red-200 rounded-md text-red-700 text-sm">
+              <div className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">
                 ❌ {error}
               </div>
             )}
@@ -163,12 +148,12 @@ export default function TambahMateri() {
             <button
               type="submit"
               disabled={loading || prompt.trim().length < 5}
-              className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-medium"
+              className="w-full rounded-md bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-400"
             >
               {loading ? (
                 <span className="flex items-center justify-center">
                   <svg
-                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                    className="mr-3 -ml-1 h-5 w-5 animate-spin text-white"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -190,20 +175,23 @@ export default function TambahMateri() {
                   Sedang membuat materi...
                 </span>
               ) : (
-                "🤖 Generate Materi"
+                <span className="flex items-center justify-center">
+                  <IoSparkles className="mr-2" />
+                  Generate Materi
+                </span>
               )}
             </button>
           </form>
         </div>
 
         {/* Result Section */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-semibold mb-4">Hasil Generate</h2>
+        <div className="rounded-lg bg-white p-6 shadow-md">
+          <h2 className="mb-4 text-xl font-semibold">Hasil Generate</h2>
 
           {!result && !loading && (
-            <div className="text-center text-gray-500 py-12">
+            <div className="py-12 text-center text-gray-500">
               <svg
-                className="mx-auto h-12 w-12 text-gray-400 mb-3"
+                className="mx-auto mb-3 h-12 w-12 text-gray-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -220,12 +208,12 @@ export default function TambahMateri() {
           )}
 
           {loading && (
-            <div className="text-center text-gray-500 py-12">
+            <div className="py-12 text-center text-gray-500">
               <div className="animate-pulse">
-                <div className="h-4 bg-gray-200 rounded w-3/4 mb-4 mx-auto"></div>
-                <div className="h-4 bg-gray-200 rounded w-full mb-4"></div>
-                <div className="h-4 bg-gray-200 rounded w-5/6 mb-4 mx-auto"></div>
-                <div className="h-4 bg-gray-200 rounded w-4/6 mb-4 mx-auto"></div>
+                <div className="mx-auto mb-4 h-4 w-3/4 rounded bg-gray-200"></div>
+                <div className="mb-4 h-4 w-full rounded bg-gray-200"></div>
+                <div className="mx-auto mb-4 h-4 w-5/6 rounded bg-gray-200"></div>
+                <div className="mx-auto mb-4 h-4 w-4/6 rounded bg-gray-200"></div>
               </div>
             </div>
           )}
@@ -243,43 +231,34 @@ export default function TambahMateri() {
 
               <div className="max-h-[600px] overflow-y-auto">
                 <div className="prose prose-sm max-w-none">
-                  <pre className="whitespace-pre-wrap bg-gray-50 p-4 rounded-md text-sm border border-gray-200">
+                  <pre className="rounded-md border border-gray-200 bg-gray-50 p-4 text-sm whitespace-pre-wrap">
                     {result.text}
                   </pre>
                 </div>
               </div>
 
-              <div className="flex gap-2 pt-3 border-t">
+              <div className="flex gap-2 border-t pt-3">
                 <button
                   onClick={() => {
                     navigator.clipboard.writeText(result.text);
                     alert("Materi berhasil disalin!");
                   }}
-                  className="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-200 transition-colors text-sm font-medium"
+                  className="flex-1 rounded-md bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200 flex items-center justify-center"
                 >
-                  📋 Salin Teks
+                  <IoCopy className="mr-2" />
+                  Salin Teks
                 </button>
                 <button
                   onClick={() => setResult(null)}
-                  className="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-200 transition-colors text-sm font-medium"
+                  className="flex-1 rounded-md bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200 flex items-center justify-center"
                 >
-                  🔄 Buat Lagi
+                  <IoRefresh className="mr-2" />
+                  Buat Lagi
                 </button>
               </div>
             </div>
           )}
         </div>
-      </div>
-
-      {/* Info Section */}
-      <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <h3 className="font-semibold text-blue-900 mb-2">ℹ️ Informasi</h3>
-        <ul className="text-sm text-blue-800 space-y-1">
-          <li>• Setiap materi akan disimpan otomatis ke database</li>
-          <li>• Rate limit: 10 request per 10 menit</li>
-          <li>• Materi akan mencakup: Tujuan, Penjelasan, Contoh, Kuis, dan Rangkuman</li>
-          <li>• AI menggunakan model: Gemini 2.5 Flash</li>
-        </ul>
       </div>
     </div>
   );
