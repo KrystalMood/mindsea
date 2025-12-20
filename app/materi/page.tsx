@@ -1,10 +1,6 @@
 import { Metadata } from "next";
 import { cookies as cookieStore } from "next/headers";
-import Hero from "@/app/materi/components/hero";
-import Statistics from "@/app/materi/components/statistics";
-import Material from "@/app/materi/components/material";
 import { Prisma } from "@/lib/prisma";
-import { Kesulitan } from "@/lib/generated/prisma";
 import { USER_ID } from "@/constants/route";
 
 export const dynamic = "force-dynamic";
@@ -69,6 +65,9 @@ function getColorTheme(
   return "blue";
 }
 
+import { Kesulitan } from "@/app/materi/constants/themes";
+import Client from "@/app/materi/client/materi";
+
 export default async function Materi() {
   const materials = await getMaterials();
   const stats = await getStats();
@@ -82,12 +81,5 @@ export default async function Materi() {
     audience: m.audience,
   }));
 
-  return (
-    <>
-      <span className="pointer-events-none absolute inset-0 -z-10 bg-[url('/images/motion-grid.svg')] mask-[linear-gradient(180deg,white,rgba(255,255,255,0))] bg-center opacity-5" />
-      <Hero />
-      <Statistics stats={stats} />
-      <Material materials={materialCards} />
-    </>
-  );
+  return <Client materials={materialCards} stats={stats} />;
 }

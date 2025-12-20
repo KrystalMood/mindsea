@@ -8,18 +8,27 @@ import {
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 
+interface MaterialCardProps extends IMaterialCard {
+  isActive?: boolean;
+}
+
 export default function MaterialCard({
   id,
   title,
   description,
   difficulty,
   colorTheme,
-}: IMaterialCard) {
+  isActive,
+}: MaterialCardProps) {
   const activeTheme = themes[colorTheme];
 
   return (
     <figure
-      className={`group relative flex flex-col rounded-3xl border-2 ${activeTheme.border} bg-white p-6 transition-all duration-300 hover:shadow-xl ${activeTheme.shadow} overflow-hidden hover:-translate-y-[2.5px]`}
+      className={`group relative flex flex-col overflow-hidden rounded-3xl border-2 bg-white p-6 transition-all duration-300 ${
+        isActive
+          ? `ring-4 ${activeTheme.ring} scale-[1.01] border-transparent shadow-xl`
+          : `${activeTheme.border} hover:-translate-y-[2.5px] hover:shadow-xl`
+      }`}
     >
       <span
         className={`absolute -top-4 -right-4 h-32 w-32 rounded-full opacity-20 transition-transform duration-500 group-hover:scale-150 ${activeTheme.icon.split(" ")[0]}`}
