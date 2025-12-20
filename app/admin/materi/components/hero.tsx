@@ -23,6 +23,6 @@ export default function Hero() {
         <LucidePlus size={18} />
         <span>Tambah Materi</span>
       </Link>
-    </section>
+    </header>
   );
 }

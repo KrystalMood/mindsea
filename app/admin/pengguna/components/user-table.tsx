@@ -24,6 +24,7 @@ export default function UserTable({ users }: { users: User[] }) {
     user.nama,
     user.surel,
     user.peran === "ADMIN" ? "Admin" : "Siswa",
+    user.peran === "SISWA" && user.kelas ? `Kelas ${user.kelas} SD` : "-",
     <div
       key={user.id.toString()}
       className="flex items-center justify-center gap-3"
@@ -47,7 +48,7 @@ export default function UserTable({ users }: { users: User[] }) {
 
   return (
     <Table
-      headers={["No", "Nama", "Surel", "Peran", "Aksi"]}
+      headers={["No", "Nama", "Surel", "Peran", "Kelas", "Aksi"]}
       sortable={["Nama", "Surel"]}
       rows={rows}
       itemsPerPage={5}

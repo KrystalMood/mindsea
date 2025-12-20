@@ -23,6 +23,7 @@ export async function GET(
         nama: true,
         surel: true,
         peran: true,
+        kelas: true,
       },
     });
 
@@ -42,6 +43,7 @@ export async function GET(
       nama: user.nama,
       surel: user.surel,
       peran: user.peran,
+      kelas: user.kelas,
     });
   } catch (error) {
     console.error("Error fetching user:", error);
@@ -76,7 +78,7 @@ export async function PUT(
         },
       );
 
-    const { nama, surel, kata_sandi, peran } = validate.data;
+    const { nama, surel, kata_sandi, peran, kelas } = validate.data;
 
     const existingUser = await Prisma.pengguna.findUnique({
       where: {
@@ -112,12 +114,21 @@ export async function PUT(
       surel?: string;
       kata_sandi?: string;
       peran?: Peran;
+      kelas?: number | null;
     } = {};
 
     if (nama) updateData.nama = nama;
     if (surel) updateData.surel = surel;
     if (kata_sandi) updateData.kata_sandi = kata_sandi;
-    if (peran) updateData.peran = peran as Peran;
+    if (peran) {
+      updateData.peran = peran as Peran;
+      // Set kelas hanya jika peran SISWA, jika ADMIN set ke null
+      if (peran === "SISWA" && kelas !== undefined) {
+        updateData.kelas = kelas;
+      } else if (peran === "ADMIN") {
+        updateData.kelas = null;
+      }
+    }
 
     await Prisma.pengguna.update({
       where: {
