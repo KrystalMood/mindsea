@@ -35,6 +35,7 @@ model pengguna {
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
 
+  progres_materi  progres_materi[]
   progres_latihan progres_latihan[]
   notifikasi      notifikasi[]
   aktivitas       aktivitas[]
@@ -72,7 +73,22 @@ model materi_generated {
   created_at   DateTime @default(now())
   updated_at   DateTime @updatedAt
 
+  progres_materi progres_materi[]
+
   @@map("materi_generated")
+}
+
+model progres_materi {
+  id           String   @id @default(cuid())
+  id_pengguna  BigInt
+  id_materi    String
+  selesai_at   DateTime @default(now())
+  created_at   DateTime @default(now())
+  pengguna     pengguna          @relation(fields: [id_pengguna], references: [id_pengguna])
+  materi       materi_generated  @relation(fields: [id_materi], references: [id])
+  @@unique([id_pengguna, id_materi])
+
+  @@map("progres_materi")
 }
 
 model pertanyaan {

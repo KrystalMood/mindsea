@@ -1,46 +1,66 @@
 import type { Metadata } from "next";
+import { Prisma } from "@/lib/prisma";
+import { notFound } from "next/navigation";
+import Hero from "./components/hero";
+import SlideContent from "./components/slide-content";
 
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
-  const { id } = await params;
+type Params = { params: Promise<{ id: string }> };
 
-  try {
-    return {
-      title: `Materi ${id} | Mindsea`,
-      description: `Detail materi dengan ID ${id}.`,
-      openGraph: {
-        title: `Materi ${id} | Mindsea`,
-        description: `Detail materi dengan ID ${id}.`,
-      },
-      twitter: {
-        title: `Materi ${id} | Mindsea`,
-        description: `Detail materi dengan ID ${id}.`,
-      },
-    };
-  } catch (error: unknown) {
-    console.error(`❌ Error fetching materi with ID ${id}: ${(error as Error).message}`);
+async function getMaterial(id: string) {
+  const material = await Prisma.materi_generated.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      judul: true,
+      konten: true,
+      audience: true,
+      format: true,
+      model: true,
+      created_at: true,
+    },
+  });
 
-    return {
-      title: "404: Materi Tidak Ditemukan | Mindsea",
-      description: `Materi dengan ID ${id} tidak ditemukan.`,
-      openGraph: {
-        title: "404: Materi Tidak Ditemukan | Mindsea",
-        description: `Materi dengan ID ${id} tidak ditemukan.`,
-      },
-      twitter: {
-        title: "404: Materi Tidak Ditemukan | Mindsea",
-        description: `Materi dengan ID ${id} tidak ditemukan.`,
-      },
-    };
-  }
+  return material;
 }
 
-export default async function DetailMateri({ params }: { params: Promise<{ id: string }> }) {
+export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { id } = await params;
+  const material = await getMaterial(id);
+
+  if (!material) {
+    return {
+      title: "Materi Tidak Ditemukan | Mindsea",
+      description: "Materi yang Anda cari tidak ditemukan.",
+    };
+  }
+
+  return {
+    title: `${material.judul} | Mindsea`,
+    description: material.konten.substring(0, 150) + "...",
+    openGraph: {
+      title: `${material.judul} | Mindsea`,
+      description: material.konten.substring(0, 150) + "...",
+    },
+    twitter: {
+      title: `${material.judul} | Mindsea`,
+      description: material.konten.substring(0, 150) + "...",
+    },
+  };
+}
+
+export default async function DetailMateri({ params }: Params) {
+  const { id } = await params;
+  const material = await getMaterial(id);
+
+  if (!material) {
+    notFound();
+  }
 
   return (
     <>
-      <span className="absolute inset-0 -z-10 bg-[url('/images/motion-grid.svg')] mask-[linear-gradient(180deg,white,rgba(255,255,255,0))] bg-center opacity-10" />
-      <section className="m-8">{id}</section>
+      <span className="pointer-events-none absolute inset-0 -z-10 bg-[url('/images/motion-grid.svg')] mask-[linear-gradient(180deg,white,rgba(255,255,255,0))] bg-center opacity-5" />
+      <Hero title={material.judul} audience={material.audience} />
+      <SlideContent material={material} />
     </>
   );
 }

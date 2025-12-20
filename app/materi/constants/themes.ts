@@ -1,10 +1,12 @@
 import { Kesulitan } from "@/lib/generated/prisma";
 
 export type MaterialCard = {
+  id: string;
   title: string;
   description: string;
   difficulty: Kesulitan;
   colorTheme: "green" | "blue" | "red" | "yellow";
+  audience?: string | null;
 };
 
 export const themes: Record<string, { border: string; bg: string; icon: string; btn: string; shadow: string }> = {

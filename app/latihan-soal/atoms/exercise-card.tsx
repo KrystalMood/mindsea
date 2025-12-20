@@ -5,8 +5,10 @@ import {
   MaterialCard as IMaterialCard,
   themes,
 } from "@/app/materi/constants/themes";
+import Link from "next/link";
 
 export default function ExerciseCard({
+  id,
   title,
   description,
   difficulty,
@@ -45,7 +47,8 @@ export default function ExerciseCard({
           <Volume2 size={12} />
           Dengarkan
         </button>
-        <button
+        <Link
+          href={`/latihan-soal/${id}`}
           className={`mt-6 flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg text-sm ${activeTheme.btn} py-3.5 font-bold text-white shadow-md transition-all duration-300 ease-in-out hover:brightness-105 active:scale-[0.98]`}
         >
           Mulai Latihan
@@ -53,7 +56,7 @@ export default function ExerciseCard({
             size={18}
             className="transition-all duration-300 ease-in-out group-hover:translate-x-1"
           />
-        </button>
+        </Link>
       </span>
     </figure>
   );

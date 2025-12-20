@@ -41,3 +41,4 @@ export const REGISTER = "/daftar";
 export const REFRESH_TOKEN = "refresh_token";
 export const SESSION_TOKEN = "session_token";
 export const USER_INFO = "user_info";
+export const USER_ID = "user_id";
