@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export default function Lessons() {
   return (
-    <section className="mx-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
+    <section className="mx-8 mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
       {lessons.map((lesson, id) => (
         <Link
           href={lesson.url}
