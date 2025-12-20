@@ -35,6 +35,7 @@ type Table = {
   headers: string[];
   rows: ReactNode[][];
   sortable: string[];
+  itemsPerPage?: number;
 }
 
 type TextArea = {

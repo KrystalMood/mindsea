@@ -13,7 +13,9 @@ export const API_ADMIN = "/api/admin";
 export const ADMIN_DASHBOARD = "/admin";
 export const ADMIN_USERS = "/admin/pengguna";
 export const ADMIN_MATERIAL = "/admin/materi";
+export const ADMIN_MATERIAL_ADD = "/admin/materi/tambah";
 export const ADMIN_QUIZZES = "/admin/soal";
+export const ADMIN_QUIZZES_ADD = "/admin/soal/tambah";
 
 /* =======================
    STUDENT ROUTES

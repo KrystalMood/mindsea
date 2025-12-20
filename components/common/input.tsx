@@ -36,23 +36,23 @@ export default function Input({ icon, label, name, onChange, placeholder, requir
   return (
     <fieldset className={`flex w-full flex-col justify-between ${!info ? "space-y-4" : ""}`}>
       <span>
-        <label htmlFor={name} className="text-primary text-sm font-medium">
+        <label htmlFor={name} className="text-heading text-sm font-medium">
           {label}
           {required && <span className="text-red-500">*</span>}
         </label>
         {info && (
-          <p className="mt-1 mb-3 cursor-default text-xs text-gray-500">
+          <p className="text-text-secondary mt-1 mb-3 cursor-default text-xs">
             {info}
           </p>
         )}
       </span>
       {type === "file" ? (
         <div className="flex items-center gap-4">
-          <span className="relative h-24 w-24 shrink-0 overflow-hidden rounded-lg border border-gray-200 bg-gray-50">
+          <span className="border-border relative h-24 w-24 shrink-0 overflow-hidden rounded-xl border bg-white">
             {preview ? (
               <Image height={1920} width={1080} src={preview} alt="Preview" className="h-full w-full object-cover" />
             ) : (
-              <i className="flex h-full w-full items-center justify-center text-gray-400">
+              <i className="text-text-secondary flex h-full w-full items-center justify-center">
                 <ImageIcon size={24} />
               </i>
             )}
@@ -71,12 +71,12 @@ export default function Input({ icon, label, name, onChange, placeholder, requir
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="bg-primary hover:bg-hover-blue flex w-fit cursor-pointer items-center gap-3 rounded-md px-5 py-3.5 text-xs font-medium text-white transition-colors"
+              className="bg-primary hover:bg-primary/90 flex w-fit cursor-pointer items-center gap-2 rounded-xl px-5 py-3 text-sm font-medium text-white transition-all"
             >
               <Upload size={16} />
               Pilih Gambar
             </button>
-            <p className="mt-0.5 cursor-default text-xs text-gray-500">
+            <p className="text-text-secondary mt-1 cursor-default text-xs">
               Maksimal 2MB (JPG, PNG)
             </p>
           </span>
@@ -84,7 +84,7 @@ export default function Input({ icon, label, name, onChange, placeholder, requir
       ) : (
         <div className="relative">
           {icon && (
-            <span className="absolute inset-y-0 left-0 flex items-center pl-6 text-slate-500/50">
+            <span className="text-text-secondary absolute inset-y-0 left-0 flex items-center pl-5">
               {icon}
             </span>
           )}
@@ -99,10 +99,10 @@ export default function Input({ icon, label, name, onChange, placeholder, requir
             step={type === "number" ? "any" : undefined}
             onChange={handleInput}
             onWheel={handleWheel}
-            className={`box-border w-full rounded-[0.7rem] border-[1.5px] border-[#d1d5db] py-4 text-sm text-[#222] shadow-[0_1px_4px_rgba(60,60,60,0.04)] transition-all duration-200 outline-none placeholder:text-sm placeholder:text-[#b0b8c1] placeholder:opacity-100 focus:border-[#22b6d1] focus:shadow-[0_2px_8px_0_#22b6d122] ${icon ? "pl-14" : "pl-4"} ${type === "password" ? "pr-12" : "pr-4"}`}
+            className={`border-border text-heading placeholder:text-text-secondary focus:border-primary focus:ring-primary/10 box-border w-full rounded-xl border bg-white py-4 text-sm transition-all outline-none placeholder:text-sm focus:ring-2 ${icon ? "pl-14" : "pl-5"} ${type === "password" ? "pr-12" : "pr-5"}`}
           />
           {type === "password" && (
-            <span onClick={() => setShowPassword((prev) => !prev)} className="absolute top-1/2 right-6 -translate-y-1/2 cursor-pointer text-gray-500">
+            <span onClick={() => setShowPassword((prev) => !prev)} className="text-text-secondary absolute top-1/2 right-5 -translate-y-1/2 cursor-pointer transition-colors hover:text-heading">
               {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </span>
           )}
