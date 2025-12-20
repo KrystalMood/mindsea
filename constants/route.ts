@@ -20,10 +20,11 @@ export const ADMIN_QUIZZES = "/admin/soal";
    ======================= */
 export const STUDENT_DASHBOARD = "/";
 export const STUDENT_MATERIAL = "/materi";
-export const STUDENT_QUIZZES = "/latihan";
-export const STUDENT_PROGRESS = "/progres";
+export const STUDENT_QUIZZES = "/latihan-soal";
+export const STUDENT_PROGRESS = "/progres-belajar";
 export const STUDENT_NOTIFICATIONS = "/notifikasi";
 export const STUDENT_GAMES = "/permainan";
+export const STUDENT_ABOUT_US = "/tentang-kami";
 
 /* =======================
    PUBLIC ROUTES
