@@ -1,24 +1,30 @@
+"use client";
+
 import { stats } from "@/app/latihan-soal/constants/stats";
 
-export default function Statistics() {
+export default function Statistics({ activeIndex }: { activeIndex: number }) {
   return (
-    <section className="mx-8 mt-6 grid cursor-default grid-cols-1 gap-4 md:grid-cols-3">
-      {stats.map((stat, index) => (
-        <figure
-          key={index}
-          className={`flex items-center bg-white gap-4 rounded-2xl border shadow-sm p-5 transition-all hover:shadow-md`}
-        >
-          <span
-            className={`flex h-8 w-8 items-center justify-center rounded-xl bg-white shadow-sm lg:h-14 lg:w-14 ${stat.iconColor}`}
-          >
-            <stat.icon className="h-4 w-4 lg:h-6 lg:w-6" />
-          </span>
-          <figcaption>
-            <p className="text-sm font-medium text-slate-500">{stat.label}</p>
-            <p className="text-2xl font-bold text-slate-800">{stat.value}</p>
-          </figcaption>
-        </figure>
-      ))}
+    <section className="mx-8 grid grid-cols-1 gap-6 md:grid-cols-2">
+      {stats.map((stat, index) => {
+        return (
+          <figure key={index} className={`group relative overflow-hidden rounded-2xl border-2 p-6 transition-all duration-300 ${stat.borderColor} ${stat.bgColor} ${activeIndex === index + 1 ? "scale-[1.02] border-transparent shadow-xl ring-4 shadow-orange-100 ring-orange-400" : "hover:shadow-md"}`}>
+            <span className={`absolute -right-6 -bottom-6 h-24 w-24 rounded-full transition-transform duration-700 group-hover:scale-125 ${stat.bgColor}`} />
+            <div className="relative z-10 flex items-center gap-5">
+              <i className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-white shadow-sm transition-all duration-300 ease-in-out ${stat.iconColor}`}>
+                <stat.icon size={28} />
+              </i>
+              <figcaption className="flex flex-col">
+                <p className="text-xs font-bold tracking-widest text-slate-400 uppercase">
+                  {stat.label}
+                </p>
+                <h2 className="mt-1 text-3xl font-black tracking-tight text-slate-800">
+                  {stat.value}
+                </h2>
+              </figcaption>
+            </div>
+          </figure>
+        );
+      })}
     </section>
   );
 }
