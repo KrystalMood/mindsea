@@ -8,10 +8,10 @@ export async function submit(e: ChangeEvent<HTMLFormElement>) {
   const formData = new FormData(e.currentTarget);
 
   try {
-    const payload: Record<Exclude<keyof typeof UsersSchema.shape, "nama" | "peran">, string> = {
-      surel: formData.get("surel") as string,
-      kata_sandi: formData.get("kata_sandi") as string,
-    };
+  const payload: Record<"surel" | "kata_sandi", string> = {
+    surel: formData.get("surel") as string,
+    kata_sandi: formData.get("kata_sandi") as string,
+  };
 
     // const response = await axios.post(API_AUTH_LOGIN, payload);
     const { data } = await axios.post<{ message: string; url?: string }>(API_AUTH_LOGIN, payload);
