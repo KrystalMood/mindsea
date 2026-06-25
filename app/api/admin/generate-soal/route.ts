@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { GoogleGenAI } from "@google/genai";
 import { Prisma } from "@/lib/prisma";
+import { generateGeminiContent } from "@/lib/gemini";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -114,16 +114,12 @@ export async function POST(request: NextRequest) {
 
     // Generate questions using Gemini
     const apiKey = process.env.GOOGLE_API_KEY;
-    const modelName = process.env.GEMINI_MODEL || "gemini-2.0-flash-exp";
-
     if (!apiKey) {
       return NextResponse.json(
         { message: "API key tidak dikonfigurasi" },
         { status: 500 }
       );
     }
-
-    const genAI = new GoogleGenAI({ apiKey });
 
     const prompt = `Kamu adalah seorang guru yang ahli dalam membuat soal pilihan ganda untuk siswa sekolah dasar (SD).
 
@@ -159,8 +155,8 @@ FORMAT OUTPUT (JSON):
 
 PENTING: Berikan respons HANYA dalam format JSON yang valid tanpa penjelasan tambahan.`;
 
-    const result = await genAI.models.generateContent({
-      model: modelName,
+    const { result } = await generateGeminiContent({
+      apiKey,
       contents: [
         {
           role: "user",
@@ -204,7 +200,7 @@ PENTING: Berikan respons HANYA dalam format JSON yang valid tanpa penjelasan tam
       {
         message: `Gagal generate soal: ${(error as Error).message}`,
       },
-      { status: 500 }
+      { status: (error as Error).message.includes("503") ? 503 : 500 }
     );
   }
 }

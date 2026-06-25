@@ -25,9 +25,13 @@ export async function submit(e: ChangeEvent<HTMLFormElement>) {
     window.location.assign(data.url);
   } catch (error: unknown) {
     const message =
-      error instanceof Error
-        ? error.message
-        : "Terjadi kesalahan saat masuk ke akun Anda.";
+      axios.isAxiosError<{ message?: string }>(error)
+        ? (error.response?.data?.message ??
+          error.message ??
+          "Terjadi kesalahan saat masuk ke akun Anda.")
+        : error instanceof Error
+          ? error.message
+          : "Terjadi kesalahan saat masuk ke akun Anda.";
 
     console.error(`❌ Terjadi kesalahan saat masuk ke akun Anda: ${message}`);
     throw new Error(message);

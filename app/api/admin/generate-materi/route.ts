@@ -1,4 +1,3 @@
-import { GoogleGenAI } from "@google/genai";
 import { NextRequest, NextResponse } from "next/server";
 import { cookies as cookieStore } from "next/headers";
 import { z } from "zod";
@@ -6,6 +5,7 @@ import { Prisma } from "@/lib/prisma";
 import { USER_INFO } from "@/constants/route";
 import { Peran } from "@/lib/generated/prisma";
 import { checkRateLimit, getClientIp } from "@/lib/rate-limiter";
+import { generateGeminiContent } from "@/lib/gemini";
 
 // Input validation schema
 const GenerateMateriSchema = z.object({
@@ -102,7 +102,7 @@ export async function POST(
 
     // === 4. Initialize Gemini API ===
     const apiKey = process.env.GOOGLE_API_KEY;
-    const model = process.env.GEMINI_MODEL || "gemini-2.0-flash-exp";
+    const model = process.env.GEMINI_MODEL || "gemini-3.5-flash";
 
     if (!apiKey) {
       console.error("❌ GOOGLE_API_KEY not configured");
@@ -114,8 +114,6 @@ export async function POST(
         { status: 500 },
       );
     }
-
-    const genAI = new GoogleGenAI({ apiKey });
 
     // === 5. Construct Prompt with System Instructions ===
     const systemInstruction = `
@@ -168,8 +166,8 @@ Tulis hanya konten materi dalam Markdown sesuai struktur di atas. Tidak ada pref
     console.log("🚀 Generating material with Gemini...");
 
     // === 6. Call Gemini API ===
-    const result = await genAI.models.generateContent({
-      model: model,
+    const { result, model: resolvedModel } = await generateGeminiContent({
+      apiKey,
       contents: [
         {
           role: "user",
@@ -207,7 +205,7 @@ Tulis hanya konten materi dalam Markdown sesuai struktur di atas. Tidak ada pref
         judul: finalTitle,
         prompt: prompt,
         konten: generatedText,
-        model: model,
+        model: resolvedModel,
         audience: audience || null,
         format: format,
         created_by: null, // TODO: Add user ID when auth system is fully integrated
@@ -221,7 +219,7 @@ Tulis hanya konten materi dalam Markdown sesuai struktur di atas. Tidak ada pref
       {
         id: savedMaterial.id,
         text: generatedText,
-        model: model,
+        model: resolvedModel,
         title: finalTitle,
       },
       {
@@ -243,7 +241,9 @@ Tulis hanya konten materi dalam Markdown sesuai struktur di atas. Tidak ada pref
           error: "Generation failed",
           details: (error as Error).message,
         },
-        { status: 500 },
+        {
+          status: (error as Error).message.includes("503") ? 503 : 500,
+        },
       );
     }
 
